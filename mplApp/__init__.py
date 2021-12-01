@@ -245,8 +245,8 @@ class Results(Page):
 
 page_sequence = [
     InstructionsStageOne,
-    ComprehensionStageOne1,
-    ComprehensionStageOne2.
+    #ComprehensionStageOne1,
+    #ComprehensionStageOne2.
     #SaveToday,
     #InvestA,
     #Confirm,
