@@ -73,15 +73,15 @@ class Constants(BaseConstants):
 
 
 class Subsession(BaseSubsession):
-    def creating_session(self):
-        if self.round_number == 1:
+    def creating_session(player):
+        if player.round_number == 1:
             #determine paying round order (between 0 and max round order)
             paying_round = random.randint(0,Constants.order_max)
-            self.session.vars['paying_round'] = paying_round
+            player.session.vars['paying_round'] = paying_round
 
             #draw number between 0 and 1 that will determine paying asset
             paying_asset_number = random.uniform(0,1) # if less than probA in the paying round then A pays, else B
-            self.session.vars['paying_asset_number'] = paying_asset_number
+            player.session.vars['paying_asset_number'] = paying_asset_number
 
             #map from paying_asset_number to the asset letter
             #compare paying_asset_number to the return probability of asset A in the paying round
@@ -92,13 +92,13 @@ class Subsession(BaseSubsession):
 
 
             paying_order_s2 = random.randint(0, Constants.order_max_s2-1)
-            self.session. vars['paying_order_s2'] = paying_order_s2
+            player.session. vars['paying_order_s2'] = paying_order_s2
 
             paying_choice_number_s2 = random.randint(0, 19)
-            self.session.vars['paying_choice_number_s2'] = paying_choice_number_s2
+            player.session.vars['paying_choice_number_s2'] = paying_choice_number_s2
 
             paying_asset_s2 = random.uniform(0,1)
-            self.session.vars['paying_asset_number_s2'] = paying_asset_s2
+            player.session.vars['paying_asset_number_s2'] = paying_asset_s2
 
 
 class Group(BaseGroup):
