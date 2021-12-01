@@ -91,6 +91,7 @@ class Results(Page):
         }
 
 page_sequence = [
+    InstructionOne,
     Instructions,
     MplPage,
     Results,
