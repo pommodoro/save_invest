@@ -55,19 +55,19 @@ class InstructionsStageOne(Page):
     def is_displayed(player):
         return player.round_number == 1
 
-class ComprehensionStageOne1(Page):
-    def is_displayed(player):
-        return player.round_number == 1
+# class ComprehensionStageOne1(Page):
+#     def is_displayed(player):
+#         return player.round_number == 1
 
-    form_model = 'player'
-    form_fields = ['comp_instant', 'comp_oneMonthA','comp_oneMonthB']
+#     form_model = 'player'
+#     form_fields = ['comp_instant', 'comp_oneMonthA','comp_oneMonthB']
 
-class ComprehensionStageOne2(Page):
-    def is_displayed(player):
-        return player.round_number == 1
+# class ComprehensionStageOne2(Page):
+#     def is_displayed(player):
+#         return player.round_number == 1
 
-    form_model = 'player'
-    form_fields = ['comp_instant', 'comp_oneMonthA','comp_oneMonthB']
+#     form_model = 'player'
+#     form_fields = ['comp_instant', 'comp_oneMonthA','comp_oneMonthB']
 
 # class SaveToday(Page):
 #     def is_displayed(player):
