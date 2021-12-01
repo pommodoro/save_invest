@@ -74,32 +74,34 @@ class Constants(BaseConstants):
 
 
 class Subsession(BaseSubsession):
-    def creating_session(player):
-        if player.round_number == 1:
-            #determine paying round order (between 0 and max round order)
-            paying_round = random.randint(0,Constants.order_max)
-            player.session.vars['paying_round'] = paying_round
+    # def creating_session(player):
+    #     if player.round_number == 1:
+    #         #determine paying round order (between 0 and max round order)
+    #         paying_round = random.randint(0,Constants.order_max)
+    #         player.session.vars['paying_round'] = paying_round
 
-            #draw number between 0 and 1 that will determine paying asset
-            paying_asset_number = random.uniform(0,1) # if less than probA in the paying round then A pays, else B
-            player.session.vars['paying_asset_number'] = paying_asset_number
+    #         #draw number between 0 and 1 that will determine paying asset
+    #         paying_asset_number = random.uniform(0,1) # if less than probA in the paying round then A pays, else B
+    #         player.session.vars['paying_asset_number'] = paying_asset_number
 
-            #map from paying_asset_number to the asset letter
-            #compare paying_asset_number to the return probability of asset A in the paying round
-            #if paying_asset_number <= Constants.probA[Constants.round_order[self.round_number]]:
-            #    paying_asset = "A"
-            #else: paying_asset = "B"
-            #self.session.vars['paying_asset'] = paying_asset
+    #         #map from paying_asset_number to the asset letter
+    #         #compare paying_asset_number to the return probability of asset A in the paying round
+    #         #if paying_asset_number <= Constants.probA[Constants.round_order[self.round_number]]:
+    #         #    paying_asset = "A"
+    #         #else: paying_asset = "B"
+    #         #self.session.vars['paying_asset'] = paying_asset
 
 
-            paying_order_s2 = random.randint(0, Constants.order_max_s2-1)
-            player.session. vars['paying_order_s2'] = paying_order_s2
+    #         paying_order_s2 = random.randint(0, Constants.order_max_s2-1)
+    #         player.session. vars['paying_order_s2'] = paying_order_s2
 
-            paying_choice_number_s2 = random.randint(0, 19)
-            player.session.vars['paying_choice_number_s2'] = paying_choice_number_s2
+    #         paying_choice_number_s2 = random.randint(0, 19)
+    #         player.session.vars['paying_choice_number_s2'] = paying_choice_number_s2
 
-            paying_asset_s2 = random.uniform(0,1)
-            player.session.vars['paying_asset_number_s2'] = paying_asset_s2
+    #         paying_asset_s2 = random.uniform(0,1)
+    #         player.session.vars['paying_asset_number_s2'] = paying_asset_s2
+
+    pass
 
 
 class Group(BaseGroup):
@@ -112,6 +114,197 @@ class Player(BasePlayer):
     # If it is needed as a list again (e.g. for payoff calculation) it can be converted 
     # back into a list by importing the json module and using using json.loads()
     options_chosen = models.StringField()
+
+    # Comprehension Question Fields
+    comp_instant = models.FloatField()
+    comp_oneMonthA = models.FloatField()
+    comp_oneMonthB = models.FloatField()
+    comp_prob1 = models.FloatField()
+    comp_prob2 = models.FloatField()
+
+    #Round Parameters
+    counter = models.IntegerField()
+    round_order = models.IntegerField()
+    round_endowment = models.CurrencyField()
+    round_probA = models.FloatField()
+    round_probB = models.FloatField()
+    round_returnA = models.FloatField()
+    round_returnB = models.FloatField()
+
+    #Round Choices
+    savings = models.CurrencyField(min = 0, max = 10)
+    investA = models.CurrencyField()
+    # set min value for input in investA
+    def investA_min(self):
+        if (self.round_probB == 0):
+            return self.round_endowment - self.savings
+        return 0
+
+    # set max value for input in investA
+    def investA_max(self):
+        return self.round_endowment - self.savings
+        
+    investB = models.CurrencyField()
+
+    #Payoffs
+    paying_asset = models.StringField()
+    payoff_today = models.CurrencyField()
+    payoff_oneMonth = models.CurrencyField()
+
+    make_changes = models.BooleanField()
+
+    stage1_round = models.IntegerField()
+    choice1 = models.IntegerField(
+        choices = [
+            [1, ''],
+            [2, ''],
+        ],
+        widget = widgets.RadioSelectHorizontal
+    )
+    choice2 = models.IntegerField(
+        choices=[
+            [1, ''],
+            [2, ''],
+        ],
+        widget = widgets.RadioSelectHorizontal
+    )
+    choice3 = models.IntegerField(
+        choices=[
+            [1, ''],
+            [2, ''],
+        ],
+        widget = widgets.RadioSelectHorizontal
+    )
+    choice4 = models.IntegerField(
+        choices=[
+            [1, ''],
+            [2, ''],
+        ],
+        widget = widgets.RadioSelectHorizontal
+    )
+    choice5 = models.IntegerField(
+        choices=[
+            [1, ''],
+            [2, ''],
+        ],
+        widget=widgets.RadioSelectHorizontal
+    )
+    choice6 = models.IntegerField(
+        choices=[
+            [1, ''],
+            [2, ''],
+        ],
+        widget = widgets.RadioSelectHorizontal
+    )
+    choice7 = models.IntegerField(
+        choices=[
+            [1, ''],
+            [2, ''],
+        ],
+        widget=widgets.RadioSelectHorizontal
+    )
+    choice8 = models.IntegerField(
+        choices=[
+            [1, ''],
+            [2, ''],
+        ],
+        widget=widgets.RadioSelectHorizontal
+    )
+    choice9 = models.IntegerField(
+        choices=[
+            [1, ''],
+            [2, ''],
+        ],
+        widget=widgets.RadioSelectHorizontal
+    )
+    choice10 = models.IntegerField(
+        choices=[
+            [1, ''],
+            [2, ''],
+        ],
+        widget=widgets.RadioSelectHorizontal
+    )
+    choice11 = models.IntegerField(
+        choices=[
+            [1, ''],
+            [2, ''],
+        ],
+        widget=widgets.RadioSelectHorizontal
+    )
+    choice12 = models.IntegerField(
+        choices=[
+            [1, ''],
+            [2, ''],
+        ],
+        widget=widgets.RadioSelectHorizontal
+    )
+    choice13 = models.IntegerField(
+        choices=[
+            [1, ''],
+            [2, ''],
+        ],
+        widget = widgets.RadioSelectHorizontal
+    )
+    choice14 = models.IntegerField(
+        choices=[
+            [1, ''],
+            [2, ''],
+        ],
+        widget=widgets.RadioSelectHorizontal
+    )
+    choice15 = models.IntegerField(
+        choices=[
+            [1, ''],
+            [2, ''],
+        ],
+        widget=widgets.RadioSelectHorizontal
+    )
+    choice16 = models.IntegerField(
+        choices=[
+            [1, ''],
+            [2, ''],
+        ],
+        widget=widgets.RadioSelectHorizontal
+    )
+    choice17 = models.IntegerField(
+        choices=[
+            [1, ''],
+            [2, ''],
+        ],
+        widget=widgets.RadioSelectHorizontal
+    )
+    choice18 = models.IntegerField(
+        choices=[
+            [1, ''],
+            [2, ''],
+        ],
+        widget=widgets.RadioSelectHorizontal
+    )
+    choice19 = models.IntegerField(
+        choices=[
+            [1, ''],
+            [2, ''],
+        ],
+        widget=widgets.RadioSelectHorizontal
+    )
+
+
+    #Error Messages for incorrect user inputs
+    def comp_instant_error_message(self, value):
+       if value != 10:
+           return 'Incorrect. Try Again.'
+    def comp_oneMonthA_error_message(self, value):
+         if value != 11:
+             return 'Incorrect. Try Again.'
+    def comp_oneMonthB_error_message(self, value):
+         if value != 5:
+             return 'Incorrect. Try Again.'
+    def comp_prob1_error_message(self, value):
+         if value != 60:
+             return 'Incorrect. Try Again.'
+    def comp_prob2_error_message(self, value):
+         if value != 40:
+             return 'Incorrect. Try Again.'
 
 # PAGES
 class InstructionsStageOne(Page):
