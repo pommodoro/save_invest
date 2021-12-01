@@ -244,13 +244,13 @@ class Results(Page):
         }
 
 page_sequence = [
-    InstructionsStageOne1,
-    ComprehensionStageOne2,
-    InstructionsStageTwo,
+    InstructionsStageOne,
+    ComprehensionStageOne1,
+    ComprehensionStageOne2.
     SaveToday,
     InvestA,
     Confirm,
-    InstructionsStage2,
+    InstructionsStageTwo,
     MplPage,
     Results,
 ]
