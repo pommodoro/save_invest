@@ -4,7 +4,7 @@ SESSION_CONFIGS = [
     dict(
         name='mplApp',
         app_sequence=['mplApp'],
-        num_demo_participants=3,
+        num_demo_participants=1,
     ),
 ]
 
@@ -26,7 +26,7 @@ LANGUAGE_CODE = 'en'
 
 # e.g. EUR, GBP, CNY, JPY
 REAL_WORLD_CURRENCY_CODE = 'USD'
-USE_POINTS = True
+USE_POINTS = False
 
 ADMIN_USERNAME = 'admin'
 # for security, best to set admin password in an environment variable
