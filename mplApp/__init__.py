@@ -51,6 +51,7 @@ class Player(BasePlayer):
     # back into a list by importing the json module and using using json.loads()
     options_chosen = models.StringField()
 
+# PAGES
 class InstructionsStageOne(Page):
     def is_displayed(player):
         return player.round_number == 1
@@ -207,11 +208,9 @@ class InstructionsStageOne(Page):
 #             if session.vars['paying_asset'] == "B":
 #                 player.payoff_oneMonth = max(0, player.investB * player.round_returnB)
 
-# class InstructionsStageTwo(Page):
-#     pass
+class InstructionsStageTwo(Page):
+     pass
 
-
-# PAGES
 class MplPage(Page):
     form_model = "player"
     form_fields = ["options_chosen"]
