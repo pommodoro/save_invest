@@ -9,7 +9,8 @@ Your app description
 class Constants(BaseConstants):
     name_in_url = 'mplApp'
     players_per_group = None
-    num_rounds = 3
+    num_rounds = 10
+
     # if the variable below is True, then the variable part of the MPL is displayed on the right, otherwise it is displayed on the left
     display_variable_right = True
 
@@ -35,9 +36,69 @@ class Constants(BaseConstants):
         [65, 75, 85, 95],
     ]
 
+    order_max = 2 #number of unique rounds in stage1-1
+    order_max_s2 = 2 #number of unique rounds in stage 2
+
+    # randomize order of rounds
+    round_order = list(range(1, order_max+2, 1)) #round order is range from 1 to 43 (or number of unique rounds)
+    # print("Original: ", round_order)
+    random.shuffle(round_order)
+    # print("1 shuffle: ", round_order)
+
+
+    # input the round parameters
+    endowment = [0]
+    probA = [0]
+    probB = [0]
+    returnA = [0]
+    returnB = [0]
+
+    endowment.insert(1, 10)
+    probA.insert(1, 1)
+    probB.insert(1, 0)
+    returnA.insert(1, 2.1)
+    returnB.insert(1, -1)
+
+    endowment.insert(2, 10)
+    probA.insert(2, 0.1)
+    probB.insert(2, 0.9)
+    returnA.insert(2, 1.9)
+    returnB.insert(2, 2.3)
+
+    endowment.insert(3, 10)
+    probA.insert(3, 0.55)
+    probB.insert(3, 0.45)
+    returnA.insert(3, 2.7)
+    returnB.insert(3, 1.6)
+
 
 class Subsession(BaseSubsession):
-    pass
+    def creating_session(self):
+        if self.round_number == 1:
+            #determine paying round order (between 0 and max round order)
+            paying_round = random.randint(0,Constants.order_max)
+            self.session.vars['paying_round'] = paying_round
+
+            #draw number between 0 and 1 that will determine paying asset
+            paying_asset_number = random.uniform(0,1) # if less than probA in the paying round then A pays, else B
+            self.session.vars['paying_asset_number'] = paying_asset_number
+
+            #map from paying_asset_number to the asset letter
+            #compare paying_asset_number to the return probability of asset A in the paying round
+            #if paying_asset_number <= Constants.probA[Constants.round_order[self.round_number]]:
+            #    paying_asset = "A"
+            #else: paying_asset = "B"
+            #self.session.vars['paying_asset'] = paying_asset
+
+
+            paying_order_s2 = random.randint(0, Constants.order_max_s2-1)
+            self.session. vars['paying_order_s2'] = paying_order_s2
+
+            paying_choice_number_s2 = random.randint(0, 19)
+            self.session.vars['paying_choice_number_s2'] = paying_choice_number_s2
+
+            paying_asset_s2 = random.uniform(0,1)
+            self.session.vars['paying_asset_number_s2'] = paying_asset_s2
 
 
 class Group(BaseGroup):
@@ -56,19 +117,19 @@ class InstructionsStageOne(Page):
     def is_displayed(player):
         return player.round_number == 1
 
-# class ComprehensionStageOne1(Page):
-#     def is_displayed(player):
-#         return player.round_number == 1
+class ComprehensionStageOne1(Page):
+    def is_displayed(player):
+        return player.round_number == 1
 
-#     form_model = 'player'
-#     form_fields = ['comp_instant', 'comp_oneMonthA','comp_oneMonthB']
+    form_model = 'player'
+    form_fields = ['comp_instant', 'comp_oneMonthA','comp_oneMonthB']
 
-# class ComprehensionStageOne2(Page):
-#     def is_displayed(player):
-#         return player.round_number == 1
+class ComprehensionStageOne2(Page):
+    def is_displayed(player):
+        return player.round_number == 1
 
-#     form_model = 'player'
-#     form_fields = ['comp_instant', 'comp_oneMonthA','comp_oneMonthB']
+    form_model = 'player'
+    form_fields = ['comp_instant', 'comp_oneMonthA','comp_oneMonthB']
 
 # class SaveToday(Page):
 #     def is_displayed(player):
