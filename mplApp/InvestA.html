@@ -25,7 +25,7 @@
       <div class = "row">
           <div class="col-6 text-center border border-dark bg-white">
               <br><br>
-              How much money do you want to keep today? {{ formfield player.savings}}
+              How much money do you want to keep today? {{ formfields 'savings' }} 
               <br><br><br>
           </div>
           <div class="col-6 text-center border border-dark bg-white">
@@ -41,7 +41,7 @@
                       <br>How much would you like to invest in Asset A?<br>
                   </div>
                   <div class = "col bg-white">
-                      <br>{{formfield player.investA}}<br>
+                      <br>{{ formfields 'savings' }}<br>
                   </div>
               </div>
                   {% next_button %}
