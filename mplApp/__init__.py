@@ -290,19 +290,19 @@ class Player(BasePlayer):
 
 
     #Error Messages for incorrect user inputs
-    def comp_instant_error_message(self, value):
+    def comp_instant_error_message(player, value):
        if value != 10:
            return 'Incorrect. Try Again.'
-    def comp_oneMonthA_error_message(self, value):
+    def comp_oneMonthA_error_message(player, value):
          if value != 11:
              return 'Incorrect. Try Again.'
-    def comp_oneMonthB_error_message(self, value):
+    def comp_oneMonthB_error_message(player, value):
          if value != 5:
              return 'Incorrect. Try Again.'
-    def comp_prob1_error_message(self, value):
+    def comp_prob1_error_message(player, value):
          if value != 60:
              return 'Incorrect. Try Again.'
-    def comp_prob2_error_message(self, value):
+    def comp_prob2_error_message(player, value):
          if value != 40:
              return 'Incorrect. Try Again.'
 
@@ -420,12 +420,12 @@ class ComprehensionStageOne2(Page):
 #             money_today_display=money_today,
 #             money_onemonthA_display=money_onemonthA,
 #             money_onemonthB_display=money_onemonthB,
-#             roundNo_display = self.player.counter+1
+#             roundNo_display = player.counter+1
 #         )
 
 #     #for the barchart
 #     def js_vars(player):
-#         order = Constants.round_order[self.player.counter]
+#         order = Constants.round_order[player.counter]
 #         money_today = player.savings
 #         money_onemonthA = Constants.returnA[order] * player.investA
 #         money_onemonthB = max(0,Constants.returnB[order] * (Constants.endowment[order] - player.savings - player.investA))
