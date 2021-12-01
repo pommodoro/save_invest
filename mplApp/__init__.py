@@ -333,7 +333,7 @@ class SaveToday(Page):
 
         prev_player = player.in_round(player.round_number - 1)
 
-        if (prev_player.make_changes == False and prev_player.counter ==Constants.order_max):
+        if (prev_player.make_changes == False and prev_player.counter == Constants.order_max):
             player.make_changes = False
             player.counter = Constants.order_max
             player.round_order = 0
@@ -380,7 +380,7 @@ class InvestA(Page):
             probB_display=probB,
             returnB_display=returnB if returnB>0 else "N/A",
             max_investA_display=max_investA,
-            roundNo_display = player.counter+1
+            roundNo_display=player.counter+1
         )
 
 class Confirm(Page):
