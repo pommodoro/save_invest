@@ -289,22 +289,22 @@ class Player(BasePlayer):
     )
 
 
-    #Error Messages for incorrect user inputs
-    def comp_instant_error_message(player, value):
-       if value != 10:
-           return 'Incorrect. Try Again.'
-    def comp_oneMonthA_error_message(player, value):
-         if value != 11:
-             return 'Incorrect. Try Again.'
-    def comp_oneMonthB_error_message(player, value):
-         if value != 5:
-             return 'Incorrect. Try Again.'
-    def comp_prob1_error_message(player, value):
-         if value != 60:
-             return 'Incorrect. Try Again.'
-    def comp_prob2_error_message(player, value):
-         if value != 40:
-             return 'Incorrect. Try Again.'
+#Error Messages for incorrect user inputs
+def comp_instant_error_message(player, value):
+   if value != 10:
+       return 'Incorrect. Try Again.'
+def comp_oneMonthA_error_message(player, value):
+     if value != 11:
+         return 'Incorrect. Try Again.'
+def comp_oneMonthB_error_message(player, value):
+     if value != 5:
+         return 'Incorrect. Try Again.'
+def comp_prob1_error_message(player, value):
+     if value != 60:
+         return 'Incorrect. Try Again.'
+def comp_prob2_error_message(player, value):
+     if value != 40:
+         return 'Incorrect. Try Again.'
 
 # PAGES
 class InstructionsStageOne(Page):
