@@ -1,5 +1,6 @@
 from otree.api import *
 import json
+import random
 
 doc = """
 Your app description
