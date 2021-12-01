@@ -1,0 +1,52 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block content %}
+    <div class="container">
+      <div class="row">
+          <div class="col-3 text-center border bg-white border-dark">
+              <br>
+              Round # {{roundNo_display}}<br>
+              Endowment: {{ endowment_display }}<br><br>
+          </div>
+
+          <div class="col text-center border bg-white border-dark">
+              <br>
+              Probability that Asset A will pay: {{ probA_display }} <br>
+              Rate of Return for Asset A: {{ returnA_display }}<br><br>
+          </div>
+
+          <div class="col text-center border bg-white border-dark">
+              <br>
+              Probability that Asset B will pay: {{ probB_display }} <br>
+              Rate of Return for Asset B: {{ returnB_display }}<br><br>
+          </div>
+      </div>
+      <div class = "row">
+          <div class="col-6 text-center border border-dark bg-white">
+              <br><br>
+              How much money do you want to keep today? {{player.savings}}
+              <br><br><br>
+          </div>
+          <div class="col-6 text-center border border-dark bg-white">
+              <br><br>
+              You have the following amount to invest: {{max_investA_display}}
+              <br><br><br>
+          </div>
+      </div>
+      <div class = "row">
+          <div class = "col-7 text-center border border-dark bg-white">
+              <div class = "row">
+                  <div class = "col-8 text-center bg-white">
+                      <br>How much would you like to invest in Asset A?<br>
+                  </div>
+                  <div class = "col bg-white">
+                      <br>{{form.investA}}<br>
+                  </div>
+              </div>
+                  {% next_button %}
+          </div>
+      </div>
+    </div>
+
+{% endblock %}

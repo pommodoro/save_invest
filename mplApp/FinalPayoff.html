@@ -1,0 +1,43 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+  Final Payoff
+{% endblock %}
+
+{% block content %}
+<div>
+<p>In Stage 1, round {{ paying_round }} was selected.
+<p>Asset {{ paying_asset }} was randomly selected for payment.<br>
+<p>Based on your choices:
+<!--<p>In round {{ paying_round }}, you saved {{ payoff_today }}.
+<p>You invested {{ paying_round_investA }} in asset A.
+<p>You invested {{ paying_round_investB }} in asset B.
+<br> -->
+<p>You will receive {{ payoff_today_s1 }} today.
+<p>You will receive {{ payoff_oneMonth_s1 }} next month.<br><br>
+
+<p>In Stage 2, round {{paying_round_s2}}, question {{ paying_question }} was selected.
+<br>
+<p> Based on your choices:
+<!--<p>In question {{paying_question}}, you selected Option {{paying_choice_s2}} -->
+    {% if paying_round_decision_s2 == 1 %}
+    <!--<p>You saved {{ payoff_today_s2 }}.
+    <p>You invested {{ investA_s2 }} in asset A.
+    <p>You invested {{ investB_s2 }} in asset B. -->
+    <p>You will receive {{ payoff_today_s2 }} today.
+    <p>You will receive {{ payoff_oneMonth_s2_A }} next month.<br><br>
+    {% endif %}
+    {% if paying_round_decision_s2 == 2 %}
+    <p>You will receive {{ payoff_today_s2 }} today.
+    <p>You will receive {{ payoff_oneMonth_s2_B }} next month.<br><br>
+    {% endif %}
+<p> Overall, you will receive {{ payoff_today }} today and {{ payoff_oneMonth }} next month.
+
+
+<br>
+<p>You have now completed the experiment. Please remain seated until called by the experimenter.
+</div>
+
+    {% next_button %}
+{% endblock %}
