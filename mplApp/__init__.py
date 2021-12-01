@@ -247,9 +247,9 @@ page_sequence = [
     InstructionsStageOne,
     ComprehensionStageOne1,
     ComprehensionStageOne2.
-    SaveToday,
-    InvestA,
-    Confirm,
+    #SaveToday,
+    #InvestA,
+    #Confirm,
     InstructionsStageTwo,
     MplPage,
     Results,
