@@ -348,20 +348,20 @@ class SaveToday(Page):
     form_model = 'player'
     form_fields = ['savings']
 
-        @staticmethod
-        def vars_for_template(player):
-        #set the counter
-        if (player.round_number > 1):
-            prev_player = player.in_round(player.round_number-1)
-            #if player is altering preferences, counter set to previous round counter
-            if (prev_player.make_changes == True):
-                player.counter = prev_player.counter
-            #if new round, counter set to previous round counter +1
-            else:
-                player.counter = prev_player.counter +1
-        #if first round, counter set to 0
+    @staticmethod
+    def vars_for_template(player):
+    #set the counter
+    if (player.round_number > 1):
+        prev_player = player.in_round(player.round_number-1)
+        #if player is altering preferences, counter set to previous round counter
+        if (prev_player.make_changes == True):
+            player.counter = prev_player.counter
+        #if new round, counter set to previous round counter +1
         else:
-            player.counter = 0
+            player.counter = prev_player.counter +1
+    #if first round, counter set to 0
+    else:
+        player.counter = 0
 
         order = Constants.round_order[player.counter] if (player.counter <Constants.order_max+1) else 0
         endowment = Constants.endowment[order]
