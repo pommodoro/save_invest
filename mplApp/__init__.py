@@ -363,6 +363,7 @@ class InvestA(Page):
     form_model = 'player'
     form_fields = ['investA']
 
+    @staticmethod
     def vars_for_template(player):
         order = Constants.round_order[player.counter]
         endowment = Constants.endowment[order]
@@ -393,6 +394,7 @@ class Confirm(Page):
     form_model = 'player'
     form_fields = ['make_changes']
 
+    @staticmethod
     def vars_for_template(player):
         #writes choices for use in pages
 
