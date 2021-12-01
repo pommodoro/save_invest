@@ -1,0 +1,111 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block content %}
+    <div class="container">
+      <div class="row">
+          <div class="col-3 text-center border bg-white border-dark">
+              <p>
+                  <br>
+              Round # {{roundNo_display}}<br>
+                  Endowment: {{ endowment_display }}
+              </p>
+          </div>
+
+          <div class="col text-center border bg-white border-dark">
+              <p>
+                  <br>
+                  Probability that Asset A will pay: {{ probA_display }} <br>
+                  Rate of Return for Asset A: {{ returnA_display }}
+              </p>
+          </div>
+
+          <div class="col text-center border bg-white border-dark">
+              <p>
+                  <br>
+                  Probability that Asset B will pay: {{ probB_display }} <br>
+                  Rate of Return for Asset B: {{ returnB_display }}
+              </p>
+          </div>
+      </div>
+      <div class = "row">
+          <div class="col-6 text-center border border-dark bg-white">
+              <p>
+                  <br> <br>
+                  How much money do you want to keep today? {{ player.savings}}
+              </p>
+              <br>
+          </div>
+          <div class="col-6 text-center border border-dark bg-white">
+            <p>
+                <br>
+                <br>
+                You have the following amount to invest: {{max_investA_display}}
+            </p>
+              <br>
+          </div>
+      </div>
+      <div class = "row">
+          <div class = "col-6 text-center border border-dark bg-white">
+              <p>
+                  <br> <br>
+                  How much would you like to invest in Asset A? {{player.investA}}
+
+              </p>
+              <br>
+          </div>
+          <div class = "col-6 text-center border border-dark bg-white">
+              <p>
+                  <br>
+                  <br>
+                  You invest the following amount in Asset B: {{investB_display}}
+              </p>
+              <br>
+          </div>
+      </div>
+      <div class = "row">
+          <div class = "col-8">
+              <script src="https://code.highcharts.com/highcharts.js"></script>
+              <div>
+                  <script src="https://code.highcharts.com/highcharts.js"></script>
+                  <script src="https://code.highcharts.com/highcharts-more.js"></script>
+                  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+                  <script src="https://code.highcharts.com/modules/export-data.js"></script>
+                  <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+                  <figure class="highcharts-figure">
+                      <div id="container"></div>
+
+                  </figure>
+              <script>
+                  const chart = Highcharts.chart('container', {
+                  chart: { type: 'column'},
+                  title: { text: ''},
+                    xAxis: {
+                        categories: ['Money Today', 'Money in 1 months time if Asset A pays out', 'Money in 1 months time if Asset B pays out']
+                    },
+                    series: [{name: 'Payoffs', data: js_vars.chart_series}]
+                  });
+                </script>
+              </div>
+          </div>
+          <div class = "col">
+              <br><br><br><br><br>
+              <p style ="text-align: center;">
+                  Payment (excluding show-up fee):
+              </p>
+              <p style = "text-align: right;">
+                  Money today: {{ money_today_display }}<br><br>
+                  Money in 1 month's time if Asset A pays out: {{ money_onemonthA_display }}<br><br>
+                  Money in 1 month's time if Asset B pays out: {{ money_onemonthB_display }}<br><br>
+
+
+                  <button name="make_changes" value="True" class = "btn btn-primary">Make Changes</button>
+                  <button name="make_changes" value="False" class = "btn btn-primary">Submit</button>
+
+              </p>
+          </div>
+      </div>
+    </div>
+
+{% endblock %}
