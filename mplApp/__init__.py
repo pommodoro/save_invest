@@ -50,6 +50,9 @@ class Player(BasePlayer):
     # If it is needed as a list again (e.g. for payoff calculation) it can be converted back into a list by importing the json module and using using json.loads()
     options_chosen = models.StringField()
 
+class InstructionsOne(Page):
+    def is_displayed(player):
+        return player.round_number == 1
 
 class Instructions(Page):
     pass
