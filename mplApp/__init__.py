@@ -350,33 +350,33 @@ class SaveToday(Page):
 
     @staticmethod
     def vars_for_template(player):
-    #set the counter
-    if (player.round_number > 1):
-        prev_player = player.in_round(player.round_number-1)
-        #if player is altering preferences, counter set to previous round counter
-        if (prev_player.make_changes == True):
-            player.counter = prev_player.counter
-        #if new round, counter set to previous round counter +1
+        #set the counter
+        if (player.round_number > 1):
+            prev_player = player.in_round(player.round_number-1)
+            #if player is altering preferences, counter set to previous round counter
+            if (prev_player.make_changes == True):
+                player.counter = prev_player.counter
+            #if new round, counter set to previous round counter +1
+            else:
+                player.counter = prev_player.counter +1
+        #if first round, counter set to 0
         else:
-            player.counter = prev_player.counter +1
-    #if first round, counter set to 0
-    else:
-        player.counter = 0
+            player.counter = 0
 
-        order = Constants.round_order[player.counter] if (player.counter <Constants.order_max+1) else 0
-        endowment = Constants.endowment[order]
-        probA = Constants.probA[order]
-        returnA = Constants.returnA[order]
-        probB = Constants.probB[order]
-        returnB = Constants.returnB[order]
-        return dict(
-            endowment_display=endowment,
-            probA_display=probA,
-            returnA_display=returnA,
-            probB_display=probB,
-            returnB_display=returnB if returnB>0 else "N/A",
-            roundNo_display=player.counter+1
-        )
+            order = Constants.round_order[player.counter] if (player.counter <Constants.order_max+1) else 0
+            endowment = Constants.endowment[order]
+            probA = Constants.probA[order]
+            returnA = Constants.returnA[order]
+            probB = Constants.probB[order]
+            returnB = Constants.returnB[order]
+            return dict(
+                endowment_display=endowment,
+                probA_display=probA,
+                returnA_display=returnA,
+                probB_display=probB,
+                returnB_display=returnB if returnB>0 else "N/A",
+                roundNo_display=player.counter+1
+            )
 
     def before_next_page(player):
         #writing to memory after clicking submit
