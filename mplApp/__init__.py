@@ -378,7 +378,7 @@ class SaveToday(Page):
                 roundNo_display=player.counter+1
             )
 
-    def before_next_page(player):
+    def before_next_page(player, timeout_happened):
         #writing to memory after clicking submit
         player.round_order = Constants.round_order[player.counter]
         player.round_endowment = Constants.endowment[player.round_order]
