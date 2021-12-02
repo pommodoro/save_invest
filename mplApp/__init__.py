@@ -74,32 +74,33 @@ class Constants(BaseConstants):
 
 
 class Subsession(BaseSubsession):
-    def creating_session(subsession: Subsession):
-        if subsession.round_number == 1:
+    def creating_session(subsession):
+        session = subsession.session
+        if player.round_number == 1:
             #determine paying round order (between 0 and max round order)
             paying_round = random.randint(0,Constants.order_max)
-            participant.paying_round = paying_round
+            player.paying_round = paying_round
 
             #draw number between 0 and 1 that will determine paying asset
             paying_asset_number = random.uniform(0,1) # if less than probA in the paying round then A pays, else B
-            participant.paying_asset_number = paying_asset_number
+            player.paying_asset_number = paying_asset_number
 
             #map from paying_asset_number to the asset letter
             #compare paying_asset_number to the return probability of asset A in the paying round
             #if paying_asset_number <= Constants.probA[Constants.round_order[self.round_number]]:
             #    paying_asset = "A"
             #else: paying_asset = "B"
-            #self.session.vars['paying_asset'] = paying_asset
+            #self.subsession.vars['paying_asset'] = paying_asset
 
 
             paying_order_s2 = random.randint(0, Constants.order_max_s2-1)
-            participant.paying_order_s2 = paying_order_s2
+            player.paying_order_s2 = paying_order_s2
 
             paying_choice_number_s2 = random.randint(0, 19)
-            participant.paying_choice_number_s2 = paying_choice_number_s2
+            player.paying_choice_number_s2 = paying_choice_number_s2
 
             paying_asset_s2 = random.uniform(0,1)
-            participant.paying_asset_number_s2 = paying_asset_s2
+            player.paying_asset_number_s2 = paying_asset_s2
 
 
 class Group(BaseGroup):
@@ -487,22 +488,22 @@ class Confirm(Page):
 
         #stage 2 will now play if it is the last stage 1 round
         if (player.make_changes == False and player.counter == Constants.order_max):
-            session.vars['order'] = 1
+            subsession.order = 1
 
         # if the round was payoff-determinative, determine the paying asset and assign the values to variables
-        if player.counter == session.vars['paying_round'] and player.make_changes == False:
-            session.vars['paying_round_order'] = player.round_number
+        if player.counter == player.session['paying_round'] and player.make_changes == False:
+            player.session['paying_round_order'] = player.round_number
 
-            if session.vars['paying_asset_number'] <= player.round_probA:
-                session.vars['paying_asset'] = "A"
+            if player.session['paying_asset_number'] <= player.round_probA:
+                player.session['paying_asset'] = "A"
             else:
-                session.vars['paying_asset'] = "B"
+                player.session['paying_asset'] = "B"
 
             #set the player's payoffs today and one month from today
             player.payoff_today = player.savings
-            if session.vars['paying_asset'] == "A":
+            if player.session['paying_asset'] == "A":
                 player.payoff_oneMonth = player.investA * player.round_returnA
-            if session.vars['paying_asset'] == "B":
+            if player.session['paying_asset'] == "B":
                 player.payoff_oneMonth = max(0, player.investB * player.round_returnB)
 
 class InstructionsStageTwo(Page):
