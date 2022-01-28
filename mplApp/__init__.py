@@ -10,9 +10,23 @@ Your app description
 class Constants(BaseConstants):
     name_in_url = 'mplApp'
     players_per_group = None
-    num_rounds = 10
+    num_rounds = 150
 
-    # if the variable below is True, then the variable part of the MPL is displayed on the right, otherwise it is displayed on the left
+    order_max = 42 #number of unique rounds in stage1-1
+
+    # move this next line to mpl app
+    order_max_s2 = 2 #number of unique rounds in stage 2
+
+    # randomize order of rounds
+    round_order = list(range(1, order_max, 1)) #round order is range from 1 to 43 (or number of unique rounds)
+
+    # print("Original: ", round_order)
+    random.shuffle(round_order)
+    # print("1 shuffle: ", round_order)
+
+    ### MOVE THE BELOW TO MPL APP
+    # if the variable below is True, then the variable part of the MPL is displayed on the right, 
+    # otherwise it is displayed on the left
     display_variable_right = True
 
     # the list below should contain 1 entry per round
@@ -37,82 +51,53 @@ class Constants(BaseConstants):
         [65, 75, 85, 95],
     ]
 
-    order_max = 2 #number of unique rounds in stage1-1
-    order_max_s2 = 2 #number of unique rounds in stage 2
+    ### MOVE THE ABOVE TO MPL APP
 
-    # randomize order of rounds
-    round_order = list(range(1, order_max+2, 1)) #round order is range from 1 to 43 (or number of unique rounds)
-    # print("Original: ", round_order)
-    random.shuffle(round_order)
-    # print("1 shuffle: ", round_order)
+    # repeating the fixed endowment (10) the total number of unique comparisons + 1 since we are never in round 0
+    endowment = [10] * 43
 
+    # populating probability A
+    probA = [0, 1, 0.1,  0.55, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 0.95, 0.8, 0.3, 0.6, 0.5, 0.95,
+    0.2, 0.7, 0.4, 0.5, 0.05, 0.8, 0.3, 0.6, 0.5, 0.95,
+    0.2, 0.7, 0.4, 0.5, 0.05, 0.8, 0.3, 0.6, 0.5, 0.95, 
+    0.2, 0.7, 0.4, 0.5]
 
-    # input the round parameters
-    endowment = [0]
-    probA = [0]
-    probB = [0]
-    returnA = [0]
-    returnB = [0]
+    # populating probability B
+    probB = [round(1 - p, 2) for p in probA]
 
-    endowment.insert(1, 10)
-    probA.insert(1, 1)
-    probB.insert(1, 0)
-    returnA.insert(1, 2.1)
-    returnB.insert(1, -1)
+    # populating return to A
+    returnA = [0, 2.1,1.9, 2.7, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 
+    1.6, 1.7, 1.8, 1.9, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7,
+    1.7, 1.7, 1.7, 1.7, 2.4, 2.4, 2.4, 2.4, 2.4, 2.4,
+    2.4, 2.4, 2.4, 2.4, 2.2, 2.2, 2.2, 2.2, 2.2, 2.2,
+    2.2, 2.2, 2.2, 2.2]
 
-    endowment.insert(2, 10)
-    probA.insert(2, 0.1)
-    probB.insert(2, 0.9)
-    returnA.insert(2, 1.9)
-    returnB.insert(2, 2.3)
-
-    endowment.insert(3, 10)
-    probA.insert(3, 0.55)
-    probB.insert(3, 0.45)
-    returnA.insert(3, 2.7)
-    returnB.insert(3, 1.6)
+    # populating return to B
+    returnB = [0, -1, 2.3, 1.6, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1, -1, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5,
+    2.5, 2.5, 2.5, 2.5, 2.5, 1.8, 1.8, 1.8, 1.8, 1.8,
+    1.8, 1.8, 1.8, 1.8, 2, 2, 2, 2, 2, 2, 2,
+    2, 2, 2]
 
 
 class Subsession(BaseSubsession):
-    def creating_session(subsession):
-        session = subsession.session
-        if player.round_number == 1:
-            #determine paying round order (between 0 and max round order)
-            paying_round = random.randint(0,Constants.order_max)
-            player.paying_round = paying_round
-
-            #draw number between 0 and 1 that will determine paying asset
-            paying_asset_number = random.uniform(0,1) # if less than probA in the paying round then A pays, else B
-            player.paying_asset_number = paying_asset_number
-
-            #map from paying_asset_number to the asset letter
-            #compare paying_asset_number to the return probability of asset A in the paying round
-            #if paying_asset_number <= Constants.probA[Constants.round_order[self.round_number]]:
-            #    paying_asset = "A"
-            #else: paying_asset = "B"
-            #self.subsession.vars['paying_asset'] = paying_asset
-
-
-            paying_order_s2 = random.randint(0, Constants.order_max_s2-1)
-            player.paying_order_s2 = paying_order_s2
-
-            paying_choice_number_s2 = random.randint(0, 19)
-            player.paying_choice_number_s2 = paying_choice_number_s2
-
-            paying_asset_s2 = random.uniform(0,1)
-            player.paying_asset_number_s2 = paying_asset_s2
-
+    pass 
 
 class Group(BaseGroup):
     pass
 
 
 class Player(BasePlayer):
+    # MOVE THIS TO MPL APP
+
     # the field contains one record per choice that is either f for fixed or v for variable
     # since we cannot store lists in the database we store the information as a string.
     # If it is needed as a list again (e.g. for payoff calculation) it can be converted 
     # back into a list by importing the json module and using using json.loads()
     options_chosen = models.StringField()
+
+    # ABOVE GOES TO MPL APP
 
     # Comprehension Question Fields
     comp_instant = models.FloatField()
@@ -133,6 +118,7 @@ class Player(BasePlayer):
     #Round Choices
     savings = models.CurrencyField(min = 0, max = 10)
     investA = models.CurrencyField()
+
     # set min value for input in investA
     def investA_min(player):
         if (player.round_probB == 0):
@@ -305,6 +291,22 @@ def comp_prob2_error_message(player, value):
      if value != 40:
          return 'Incorrect. Try Again.'
 
+# FUNCTIONS
+def creating_session(subsession: Subsession):
+        if subsession.round_number == 1:
+
+            for p in subsession.get_players():
+
+                # TEMPORARY STAGE 2 PAYING ASSET WILL MOVE TO MPL APP
+                paying_order_s2 = random.randint(0, Constants.order_max_s2-1)
+                p.paying_order_s2 = paying_order_s2
+
+                paying_choice_number_s2 = random.randint(0, 19)
+                p.paying_choice_number_s2 = paying_choice_number_s2
+
+                paying_asset_s2 = random.uniform(0,1)
+                p.paying_asset_number_s2 = paying_asset_s2
+
 # PAGES
 class InstructionsStageOne(Page):
     def is_displayed(player):
@@ -325,7 +327,7 @@ class ComprehensionStageOne2(Page):
     form_fields = ['comp_prob1', 'comp_prob2']
 
 class SaveToday(Page):
-    def is_displayed(player):
+    def is_displayed(player: Player):
         if (player.round_number == 1):
             player.session.vars['order'] = 0
             return True
@@ -348,34 +350,37 @@ class SaveToday(Page):
     form_fields = ['savings']
 
     @staticmethod
-    def vars_for_template(player):
+    def vars_for_template(player: Player):
         #set the counter
         if (player.round_number > 1):
             prev_player = player.in_round(player.round_number-1)
+
             #if player is altering preferences, counter set to previous round counter
             if (prev_player.make_changes == True):
                 player.counter = prev_player.counter
+
             #if new round, counter set to previous round counter +1
             else:
-                player.counter = prev_player.counter +1
+                player.counter = prev_player.counter + 1
         #if first round, counter set to 0
         else:
             player.counter = 0
 
-            order = Constants.round_order[player.counter] if (player.counter <Constants.order_max+1) else 0
-            endowment = Constants.endowment[order]
-            probA = Constants.probA[order]
-            returnA = Constants.returnA[order]
-            probB = Constants.probB[order]
-            returnB = Constants.returnB[order]
-            return dict(
-                endowment_display=endowment,
-                probA_display=probA,
-                returnA_display=returnA,
-                probB_display=probB,
-                returnB_display=returnB if returnB>0 else "N/A",
-                roundNo_display=player.counter+1
-            )
+        order = Constants.round_order[player.counter] # if (player.counter <Constants.order_max+1) else 0
+        endowment = Constants.endowment[order]
+        probA = Constants.probA[order]
+        returnA = Constants.returnA[order]
+        probB = Constants.probB[order]
+        returnB = Constants.returnB[order]
+
+        return dict(
+            endowment_display=endowment,
+            probA_display=probA,
+            returnA_display=returnA,
+            probB_display=probB,
+            returnB_display=returnB if returnB>0 else "N/A",
+            roundNo_display=player.counter+1
+        )
 
     @staticmethod
     def before_next_page(player, timeout_happened):
@@ -427,10 +432,13 @@ class Confirm(Page):
     def is_displayed(player):
         if (player.round_number == 1):
             return True
+
         prev_player = player.in_round(player.round_number - 1)
         if (prev_player.make_changes == False and prev_player.counter == Constants.order_max):
             return False
+
         return True
+
     form_model = 'player'
     form_fields = ['make_changes']
 
@@ -487,29 +495,54 @@ class Confirm(Page):
         player.investB = player.round_endowment - player.savings - player.investA
 
         #stage 2 will now play if it is the last stage 1 round
+        # DELETE THIS SINCE WE WILL WRITE THIS AS A SEPARATE APP
         if (player.make_changes == False and player.counter == Constants.order_max):
             subsession.order = 1
 
-        # if the round was payoff-determinative, determine the paying asset and assign the values to variables
-        if player.counter == player.session['paying_round'] and player.make_changes == False:
-            player.session['paying_round_order'] = player.round_number
+        # CHECK IF THIS IS THE LAST ROUND AND THERE WERE NO CHANGES 
+        if player.counter == Constants.order_max and player.make_changes == False:
 
-            if player.session['paying_asset_number'] <= player.round_probA:
-                player.session['paying_asset'] = "A"
+            # point to the participant attribute
+            participant = player.participant
+
+            # then define the paying round
+            paying_round = random.randint(0,Constants.order_max)
+            participant.paying_round = paying_round
+
+
+            #draw number between 0 and 1 that will determine paying asset
+            paying_asset_number = random.uniform(0,1) # if less than probA in the paying round then A pays, else B
+            participant.paying_asset_number = paying_asset_number
+
+            participant.paying_round_order = participant.paying_round
+
+
+            # need to call the probability of A that was in the paying round
+            player_in_paying_round = player.in_round(paying_round)
+
+            if participant.paying_asset_number <= player_in_paying_round.round_probA:
+                participant.paying_asset = "A"
+
             else:
-                player.session['paying_asset'] = "B"
+                participant.paying_asset = "B"
 
             #set the player's payoffs today and one month from today
-            player.payoff_today = player.savings
-            if player.session['paying_asset'] == "A":
-                player.payoff_oneMonth = player.investA * player.round_returnA
-            if player.session['paying_asset'] == "B":
-                player.payoff_oneMonth = max(0, player.investB * player.round_returnB)
+            participant.payoff_today = player_in_paying_round.savings
 
+            if participant.paying_asset == "A":
+                player_in_paying_round.payoff_oneMonth = player_in_paying_round.investA * player_in_paying_round.round_returnA
+            if player.session['paying_asset'] == "B":
+                player_in_paying_round.payoff_oneMonth = max(0, player_in_paying_round.investB * player_in_paying_round.round_returnB)
+
+# MUST MOVE THESE TO MPL APP
 class InstructionsStageTwo(Page):
-     pass
+    def is_displayed(player: Player):
+        return False
 
 class MplPage(Page):
+    def is_displayed(player: Player):
+        return False
+
     form_model = "player"
     form_fields = ["options_chosen"]
 
@@ -533,12 +566,16 @@ class MplPage(Page):
         }
 
 class Results(Page):
+    def is_displayed(player: Player):
+        return False
+
     @staticmethod
     def vars_for_template(player: Player):
         list_of_choices = json.loads(player.options_chosen)
         return {
             "list_of_choices": list_of_choices,
         }
+###
 
 page_sequence = [
     InstructionsStageOne,
@@ -546,8 +583,5 @@ page_sequence = [
     ComprehensionStageOne2,
     SaveToday,
     InvestA,
-    Confirm,
-    InstructionsStageTwo,
-    MplPage,
-    Results,
+    Confirm
 ]
