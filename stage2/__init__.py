@@ -8,14 +8,11 @@ Your app description
 
 
 class Constants(BaseConstants):
-    name_in_url = 'mplApp'
+    name_in_url = 'stage2'
     players_per_group = None
     num_rounds = 150
 
-    order_max = 42 #number of unique rounds in stage1-1
-
-    # move this next line to mpl app
-    order_max_s2 = 2 #number of unique rounds in stage 2
+    order_max = 2 #number of unique rounds in stage 2
 
     # randomize order of rounds
     round_order = list(range(1, order_max, 1)) #round order is range from 1 to 43 (or number of unique rounds)
@@ -24,7 +21,6 @@ class Constants(BaseConstants):
     random.shuffle(round_order)
     # print("1 shuffle: ", round_order)
 
-    ### MOVE THE BELOW TO MPL APP
     # if the variable below is True, then the variable part of the MPL is displayed on the right, 
     # otherwise it is displayed on the left
     display_variable_right = True
@@ -50,35 +46,6 @@ class Constants(BaseConstants):
         [10, 60],
         [65, 75, 85, 95],
     ]
-
-    ### MOVE THE ABOVE TO MPL APP
-
-    # repeating the fixed endowment (10) the total number of unique comparisons + 1 since we are never in round 0
-    endowment = [10] * 43
-
-    # populating probability A
-    probA = [0, 1, 0.1,  0.55, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 0.95, 0.8, 0.3, 0.6, 0.5, 0.95,
-    0.2, 0.7, 0.4, 0.5, 0.05, 0.8, 0.3, 0.6, 0.5, 0.95,
-    0.2, 0.7, 0.4, 0.5, 0.05, 0.8, 0.3, 0.6, 0.5, 0.95, 
-    0.2, 0.7, 0.4, 0.5]
-
-    # populating probability B
-    probB = [round(1 - p, 2) for p in probA]
-
-    # populating return to A
-    returnA = [0, 2.1,1.9, 2.7, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 
-    1.6, 1.7, 1.8, 1.9, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7,
-    1.7, 1.7, 1.7, 1.7, 2.4, 2.4, 2.4, 2.4, 2.4, 2.4,
-    2.4, 2.4, 2.4, 2.4, 2.2, 2.2, 2.2, 2.2, 2.2, 2.2,
-    2.2, 2.2, 2.2, 2.2]
-
-    # populating return to B
-    returnB = [0, -1, 2.3, 1.6, -1, -1, -1, -1, -1, -1,
-    -1, -1, -1, -1, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5,
-    2.5, 2.5, 2.5, 2.5, 2.5, 1.8, 1.8, 1.8, 1.8, 1.8,
-    1.8, 1.8, 1.8, 1.8, 2, 2, 2, 2, 2, 2, 2,
-    2, 2, 2]
 
 
 class Subsession(BaseSubsession):
@@ -291,21 +258,21 @@ def comp_prob2_error_message(player, value):
      if value != 40:
          return 'Incorrect. Try Again.'
 
-# FUNCTIONS
-def creating_session(subsession: Subsession):
-        if subsession.round_number == 1:
+# # FUNCTIONS
+# def creating_session(subsession: Subsession):
+#         if subsession.round_number == 1:
 
-            for p in subsession.get_players():
+#             for p in subsession.get_players():
 
-                # TEMPORARY STAGE 2 PAYING ASSET WILL MOVE TO MPL APP
-                paying_order_s2 = random.randint(0, Constants.order_max_s2-1)
-                p.paying_order_s2 = paying_order_s2
+#                 # TEMPORARY STAGE 2 PAYING ASSET WILL MOVE TO MPL APP
+#                 paying_order_s2 = random.randint(0, Constants.order_max_s2-1)
+#                 p.paying_order_s2 = paying_order_s2
 
-                paying_choice_number_s2 = random.randint(0, 19)
-                p.paying_choice_number_s2 = paying_choice_number_s2
+#                 paying_choice_number_s2 = random.randint(0, 19)
+#                 p.paying_choice_number_s2 = paying_choice_number_s2
 
-                paying_asset_s2 = random.uniform(0,1)
-                p.paying_asset_number_s2 = paying_asset_s2
+#                 paying_asset_s2 = random.uniform(0,1)
+#                 p.paying_asset_number_s2 = paying_asset_s2
 
 # PAGES
 class InstructionsStageOne(Page):
@@ -578,10 +545,7 @@ class Results(Page):
 ###
 
 page_sequence = [
-    InstructionsStageOne,
-    ComprehensionStageOne1,
-    ComprehensionStageOne2,
-    SaveToday,
-    InvestA,
-    Confirm
+    InstructionsStageTwo,
+    MplPage,
+    Results
 ]
