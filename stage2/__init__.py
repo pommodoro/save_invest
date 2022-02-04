@@ -504,11 +504,11 @@ class Confirm(Page):
 # MUST MOVE THESE TO MPL APP
 class InstructionsStageTwo(Page):
     def is_displayed(player: Player):
-        return False
+        return True
 
 class MplPage(Page):
     def is_displayed(player: Player):
-        return False
+        return True
 
     form_model = "player"
     form_fields = ["options_chosen"]
@@ -534,7 +534,7 @@ class MplPage(Page):
 
 class Results(Page):
     def is_displayed(player: Player):
-        return False
+        return True
 
     @staticmethod
     def vars_for_template(player: Player):

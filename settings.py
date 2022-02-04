@@ -3,7 +3,10 @@ from os import environ
 SESSION_CONFIGS = [
     dict(
         name='save_invest',
-        app_sequence=['stage2', 'stage1'],
+        app_sequence=[
+        'stage1',
+         'stage2'],
+
         num_demo_participants=1,
     ),
 ]

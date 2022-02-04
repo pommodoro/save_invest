@@ -562,7 +562,7 @@ class Results(Page):
 ###
 
 page_sequence = [
-    # InstructionsStageOne,
+    InstructionsStageOne,
     ComprehensionStageOne1,
     ComprehensionStageOne2,
     SaveToday,
