@@ -1,6 +1,7 @@
 from otree.api import *
 import json
 import random
+import numpy as np
 
 doc = """
 Your app description
@@ -27,7 +28,7 @@ class Constants(BaseConstants):
 
     # the list below should contain 1 entry per round
     list_of_fixed_options = [
-        "A payoff of $1 for sure",
+        "A payoff of $4 for sure",
         "A payoff of $4 for sure",
         "A payoff of $8 for sure",
     ]
@@ -35,14 +36,14 @@ class Constants(BaseConstants):
     # It should contain the text of the variable part for a given round
     # {placeholder} will be replace with the items of the array
     list_of_variable_option_texts = [
-        "$3 with a probability of {placeholder}%",
+        "${placeholder} with a probability of 20%",
         "$7 with a probability of {placeholder}%",
         "$10 with a probability of {placeholder}%",
     ]
     # the list below contains one sublist per round
     # each sublist contains the options displayed in this round
     list_of_lists_of_variable_options = [
-        [20, 40, 60],
+        [4 + x for x in np.arange(0, 10.25, 0.25).tolist()],
         [10, 60],
         [65, 75, 85, 95],
     ]
@@ -64,200 +65,6 @@ class Player(BasePlayer):
     # back into a list by importing the json module and using using json.loads()
     options_chosen = models.StringField()
 
-    # ABOVE GOES TO MPL APP
-
-    # Comprehension Question Fields
-    comp_instant = models.FloatField()
-    comp_oneMonthA = models.FloatField()
-    comp_oneMonthB = models.FloatField()
-    comp_prob1 = models.FloatField()
-    comp_prob2 = models.FloatField()
-
-    #Round Parameters
-    counter = models.IntegerField()
-    round_order = models.IntegerField()
-    round_endowment = models.CurrencyField()
-    round_probA = models.FloatField()
-    round_probB = models.FloatField()
-    round_returnA = models.FloatField()
-    round_returnB = models.FloatField()
-
-    #Round Choices
-    savings = models.CurrencyField(min = 0, max = 10)
-    investA = models.CurrencyField()
-
-    # set min value for input in investA
-    def investA_min(player):
-        if (player.round_probB == 0):
-            return player.round_endowment - player.savings
-        return 0
-
-    # set max value for input in investA
-    def investA_max(player):
-        return player.round_endowment - player.savings
-
-    investB = models.CurrencyField()
-
-    #Payoffs
-    paying_asset = models.StringField()
-    payoff_today = models.CurrencyField()
-    payoff_oneMonth = models.CurrencyField()
-
-    make_changes = models.BooleanField()
-
-    stage1_round = models.IntegerField()
-    choice1 = models.IntegerField(
-        choices = [
-            [1, ''],
-            [2, ''],
-        ],
-        widget = widgets.RadioSelectHorizontal
-    )
-    choice2 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget = widgets.RadioSelectHorizontal
-    )
-    choice3 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget = widgets.RadioSelectHorizontal
-    )
-    choice4 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget = widgets.RadioSelectHorizontal
-    )
-    choice5 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
-    choice6 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget = widgets.RadioSelectHorizontal
-    )
-    choice7 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
-    choice8 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
-    choice9 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
-    choice10 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
-    choice11 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
-    choice12 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
-    choice13 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget = widgets.RadioSelectHorizontal
-    )
-    choice14 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
-    choice15 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
-    choice16 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
-    choice17 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
-    choice18 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
-    choice19 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
-
-
-#Error Messages for incorrect user inputs
-def comp_instant_error_message(player, value):
-   if value != 10:
-       return 'Incorrect. Try Again.'
-def comp_oneMonthA_error_message(player, value):
-     if value != 11:
-         return 'Incorrect. Try Again.'
-def comp_oneMonthB_error_message(player, value):
-     if value != 5:
-         return 'Incorrect. Try Again.'
-def comp_prob1_error_message(player, value):
-     if value != 60:
-         return 'Incorrect. Try Again.'
-def comp_prob2_error_message(player, value):
-     if value != 40:
-         return 'Incorrect. Try Again.'
-
 # # FUNCTIONS
 # def creating_session(subsession: Subsession):
 #         if subsession.round_number == 1:
@@ -275,233 +82,7 @@ def comp_prob2_error_message(player, value):
 #                 p.paying_asset_number_s2 = paying_asset_s2
 
 # PAGES
-class InstructionsStageOne(Page):
-    def is_displayed(player):
-        return player.round_number == 1
 
-class ComprehensionStageOne1(Page):
-    def is_displayed(player):
-        return player.round_number == 1
-
-    form_model = 'player'
-    form_fields = ['comp_instant', 'comp_oneMonthA','comp_oneMonthB']
-
-class ComprehensionStageOne2(Page):
-    def is_displayed(player):
-        return player.round_number == 1
-
-    form_model = 'player'
-    form_fields = ['comp_prob1', 'comp_prob2']
-
-class SaveToday(Page):
-    def is_displayed(player: Player):
-        if (player.round_number == 1):
-            player.session.vars['order'] = 0
-            return True
-
-        prev_player = player.in_round(player.round_number - 1)
-
-        if (prev_player.make_changes == False and prev_player.counter == Constants.order_max):
-            player.make_changes = False
-            player.counter = Constants.order_max
-            player.round_order = 0
-            player.round_endowment = 0
-            player.round_probA = 0
-            player.round_probB = 0
-            player.round_returnA = 0
-            player.round_returnB = 0
-            return False
-        return True
-
-    form_model = 'player'
-    form_fields = ['savings']
-
-    @staticmethod
-    def vars_for_template(player: Player):
-        #set the counter
-        if (player.round_number > 1):
-            prev_player = player.in_round(player.round_number-1)
-
-            #if player is altering preferences, counter set to previous round counter
-            if (prev_player.make_changes == True):
-                player.counter = prev_player.counter
-
-            #if new round, counter set to previous round counter +1
-            else:
-                player.counter = prev_player.counter + 1
-        #if first round, counter set to 0
-        else:
-            player.counter = 0
-
-        order = Constants.round_order[player.counter] # if (player.counter <Constants.order_max+1) else 0
-        endowment = Constants.endowment[order]
-        probA = Constants.probA[order]
-        returnA = Constants.returnA[order]
-        probB = Constants.probB[order]
-        returnB = Constants.returnB[order]
-
-        return dict(
-            endowment_display=endowment,
-            probA_display=probA,
-            returnA_display=returnA,
-            probB_display=probB,
-            returnB_display=returnB if returnB>0 else "N/A",
-            roundNo_display=player.counter+1
-        )
-
-    @staticmethod
-    def before_next_page(player, timeout_happened):
-        #writing to memory after clicking submit
-        player.round_order = Constants.round_order[player.counter]
-        player.round_endowment = Constants.endowment[player.round_order]
-        player.round_probA = Constants.probA[player.round_order]
-        player.round_returnA = Constants.returnA[player.round_order]
-        player.round_probB = Constants.probB[player.round_order]
-        player.round_returnB = Constants.returnB[player.round_order]
-
-
-class InvestA(Page):
-    def is_displayed(player):
-        if (player.round_returnB == -1):
-            player.investA = player.round_endowment - player.savings
-            return False
-        if (player.round_number == 1):
-            return True
-        prev_player = player.in_round(player.round_number - 1)
-        if (prev_player.make_changes == False and prev_player.counter == Constants.order_max):
-            return False
-        return True
-
-    form_model = 'player'
-    form_fields = ['investA']
-
-    @staticmethod
-    def vars_for_template(player):
-        order = Constants.round_order[player.counter]
-        endowment = Constants.endowment[order]
-        probA = Constants.probA[order]
-        returnA = Constants.returnA[order]
-        probB = Constants.probB[order]
-        returnB = Constants.returnB[order]
-        max_investA = Constants.endowment[order] - player.savings
-
-        return dict(
-            endowment_display=endowment,
-            probA_display=probA,
-            returnA_display=returnA,
-            probB_display=probB,
-            returnB_display=returnB if returnB>0 else "N/A",
-            max_investA_display=max_investA,
-            roundNo_display=player.counter+1
-        )
-
-class Confirm(Page):
-    def is_displayed(player):
-        if (player.round_number == 1):
-            return True
-
-        prev_player = player.in_round(player.round_number - 1)
-        if (prev_player.make_changes == False and prev_player.counter == Constants.order_max):
-            return False
-
-        return True
-
-    form_model = 'player'
-    form_fields = ['make_changes']
-
-    @staticmethod
-    def vars_for_template(player):
-        #writes choices for use in pages
-
-        order = Constants.round_order[player.counter]
-        endowment = Constants.endowment[order]
-        probA = Constants.probA[order]
-        returnA = Constants.returnA[order]
-        probB = Constants.probB[order]
-        returnB = Constants.returnB[order]
-        max_investA = Constants.endowment[order] - player.savings
-        investB = Constants.endowment[order] - player.savings - player.investA
-        money_today = player.savings
-        money_onemonthA = Constants.returnA[order] * player.investA
-        money_onemonthB = max(0, Constants.returnB[order] * (
-                        Constants.endowment[order] - player.savings - player.investA))
-
-        return dict(
-            endowment_display=endowment,
-            probA_display=probA,
-            returnA_display=returnA,
-            probB_display=probB,
-            returnB_display=returnB if returnB>0 else "N/A",
-            max_investA_display=max_investA,
-            investB_display=investB,
-            money_today_display=money_today,
-            money_onemonthA_display=money_onemonthA,
-            money_onemonthB_display=money_onemonthB,
-            roundNo_display = player.counter+1
-        )
-
-    #for the barchart
-    def js_vars(player):
-        order = Constants.round_order[player.counter]
-        money_today = player.savings
-        money_onemonthA = Constants.returnA[order] * player.investA
-        money_onemonthB = max(0,Constants.returnB[order] * (Constants.endowment[order] - player.savings - player.investA))
-        chart_series = [money_today, money_onemonthA, money_onemonthB]
-
-        return dict(
-            money_today_chart=money_today,
-            money_onemonthA_chart=money_onemonthA,
-            money_onemonthB_chart=money_onemonthB,
-            chart_series=chart_series
-        )
-
-
-    @staticmethod
-    def before_next_page(player, timeout_happened):
-        # write investB to data
-        player.investB = player.round_endowment - player.savings - player.investA
-
-        #stage 2 will now play if it is the last stage 1 round
-        # DELETE THIS SINCE WE WILL WRITE THIS AS A SEPARATE APP
-        if (player.make_changes == False and player.counter == Constants.order_max):
-            subsession.order = 1
-
-        # CHECK IF THIS IS THE LAST ROUND AND THERE WERE NO CHANGES 
-        if player.counter == Constants.order_max and player.make_changes == False:
-
-            # point to the participant attribute
-            participant = player.participant
-
-            # then define the paying round
-            paying_round = random.randint(0,Constants.order_max)
-            participant.paying_round = paying_round
-
-
-            #draw number between 0 and 1 that will determine paying asset
-            paying_asset_number = random.uniform(0,1) # if less than probA in the paying round then A pays, else B
-            participant.paying_asset_number = paying_asset_number
-
-            participant.paying_round_order = participant.paying_round
-
-
-            # need to call the probability of A that was in the paying round
-            player_in_paying_round = player.in_round(paying_round)
-
-            if participant.paying_asset_number <= player_in_paying_round.round_probA:
-                participant.paying_asset = "A"
-
-            else:
-                participant.paying_asset = "B"
-
-            #set the player's payoffs today and one month from today
-            participant.payoff_today = player_in_paying_round.savings
-
-            if participant.paying_asset == "A":
-                player_in_paying_round.payoff_oneMonth = player_in_paying_round.investA * player_in_paying_round.round_returnA
-            if player.session['paying_asset'] == "B":
-                player_in_paying_round.payoff_oneMonth = max(0, player_in_paying_round.investB * player_in_paying_round.round_returnB)
-
-# MUST MOVE THESE TO MPL APP
 class InstructionsStageTwo(Page):
     def is_displayed(player: Player):
         return True
@@ -542,7 +123,6 @@ class Results(Page):
         return {
             "list_of_choices": list_of_choices,
         }
-###
 
 page_sequence = [
     InstructionsStageTwo,
