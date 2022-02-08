@@ -90,16 +90,19 @@ class InstructionsStageTwo(Page):
     @staticmethod
     def vars_for_template(player):
     #DELETE THIS ONLY A TESTER
-        investA = player.participant.investA
-        investB = player.participant.investB
+        monthA = player.participant.monthA
+        monthB = player.participant.monthB
         savings = player.participant.savings
-        make_changes = player.participant.make_changes
+        probA = player.participant.probA
+        probB = player.participant.probB
+
     
         return dict(
-            max_investA_display=investA,
-            investB_display=investB,
+            monthA_display=monthA,
+            monthB_display=monthB,
             savings_display=savings,
-            make_changes_display=make_changes,
+            probA_display=probA,
+            probB_display=probB
         )
 
 class MplPage(Page):

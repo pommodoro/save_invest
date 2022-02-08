@@ -471,13 +471,26 @@ class Confirm(Page):
 
     @staticmethod
     def before_next_page(player, timeout_happened):
-        # write investB to data, write all data to participant fields
-        player.investB = player.round_endowment - player.savings - player.investA
-        player.participant.investA = player.investA
-        player.participant.investB = player.investB
-        player.participant.savings = player.savings
-        player.participant.make_changes = player.make_changes
+        # point to the participant attribute
+        participant = player.participant
 
+        # write investB to data
+        player.investB = player.round_endowment - player.savings - player.investA
+
+        # initialize participant lists, write all data to participant fields
+        participant.monthA = []
+        participant.monthB = []
+        participant.probA = []
+        participant.probB = []
+        participant.savings = []
+
+        order = Constants.round_order[player.counter]
+        participant.monthA.append(Constants.returnA[order] * player.investA)
+        participant.monthB.append(max(0, Constants.returnB[order] * (Constants.endowment[order] - player.savings - player.investA)))
+        participant.probA.append(player.round_probA)
+        participant.probB.append(player.round_probB)
+        participant.savings.append(player.savings)
+        
         #stage 2 will now play if it is the last stage 1 round
         # DELETE THIS SINCE WE WILL WRITE THIS AS A SEPARATE APP
         if (player.make_changes == False and player.counter == Constants.order_max):
@@ -486,8 +499,7 @@ class Confirm(Page):
         # CHECK IF THIS IS THE LAST ROUND AND THERE WERE NO CHANGES 
         if player.counter == Constants.order_max and player.make_changes == False:
 
-            # point to the participant attribute
-            participant = player.participant
+    
 
             # then define the paying round
             paying_round = random.randint(0,Constants.order_max)

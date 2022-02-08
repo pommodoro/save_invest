@@ -26,9 +26,10 @@ PARTICIPANT_FIELDS = ['paying_round',
 	'paying_asset_s2',
 	'paying_round_order',
 	'paying_asset',
-    'make_changes',
-    'investA',
-    'investB',
+    'monthA',
+    'monthB',
+    'probA',
+    'probB',
     'savings' ]
 	
 SESSION_FIELDS = ['order']
