@@ -118,6 +118,7 @@ class Player(BasePlayer):
     #Round Choices
     savings = models.CurrencyField(min = 0, max = 10)
     investA = models.CurrencyField()
+    investB = models.CurrencyField()
 
     # set min value for input in investA
     def investA_min(player):
@@ -128,14 +129,11 @@ class Player(BasePlayer):
     # set max value for input in investA
     def investA_max(player):
         return player.round_endowment - player.savings
-
-    investB = models.CurrencyField()
-
+        
     #Payoffs
     paying_asset = models.StringField()
     payoff_today = models.CurrencyField()
     payoff_oneMonth = models.CurrencyField()
-
     make_changes = models.BooleanField()
 
     stage1_round = models.IntegerField()
@@ -420,7 +418,6 @@ class Confirm(Page):
         prev_player = player.in_round(player.round_number - 1)
         if (prev_player.make_changes == False and prev_player.counter == Constants.order_max):
             return False
-
         return True
 
     form_model = 'player'
@@ -429,7 +426,6 @@ class Confirm(Page):
     @staticmethod
     def vars_for_template(player):
         #writes choices for use in pages
-
         order = Constants.round_order[player.counter]
         endowment = Constants.endowment[order]
         probA = Constants.probA[order]
@@ -475,8 +471,12 @@ class Confirm(Page):
 
     @staticmethod
     def before_next_page(player, timeout_happened):
-        # write investB to data
+        # write investB to data, write all data to participant fields
         player.investB = player.round_endowment - player.savings - player.investA
+        player.participant.investA = player.investA
+        player.participant.investB = player.investB
+        player.participant.savings = player.savings
+        player.participant.make_changes = player.make_changes
 
         #stage 2 will now play if it is the last stage 1 round
         # DELETE THIS SINCE WE WILL WRITE THIS AS A SEPARATE APP

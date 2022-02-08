@@ -87,6 +87,21 @@ class InstructionsStageTwo(Page):
     def is_displayed(player: Player):
         return True
 
+    @staticmethod
+    def vars_for_template(player):
+    #DELETE THIS ONLY A TESTER
+        investA = player.participant.investA
+        investB = player.participant.investB
+        savings = player.participant.savings
+        make_changes = player.participant.make_changes
+    
+        return dict(
+            max_investA_display=investA,
+            investB_display=investB,
+            savings_display=savings,
+            make_changes_display=make_changes,
+        )
+
 class MplPage(Page):
     def is_displayed(player: Player):
         return True
