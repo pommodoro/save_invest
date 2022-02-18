@@ -46,7 +46,7 @@
     function check_other_buttons(button_id){
         // initialise an empty array for the chosen options
         options_chosen = []
-        let input_number = parseInt(button_id.slice(-1));
+        let input_number = parseInt(button_id.match(/\d+$/)[0], 10);
         // v for variable and f for fixed
         let input_type = button_id[0]
 

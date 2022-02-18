@@ -4,14 +4,14 @@ import random
 import numpy as np
 
 doc = """
-Your app description
+Stage 2 (MPL) of save invest experiment
 """
 
 
 class Constants(BaseConstants):
     name_in_url = 'stage2'
     players_per_group = None
-    num_rounds = 150
+    num_rounds = 3
 
     order_max = 2 #number of unique rounds in stage 2
 
@@ -28,7 +28,7 @@ class Constants(BaseConstants):
 
     # the list below should contain 1 entry per round
     list_of_fixed_options = [
-        "A payoff of $4 for sure",
+        "Today: $5. One Month: $5, 30% and $9, 70%",
         "A payoff of $4 for sure",
         "A payoff of $8 for sure",
     ]
@@ -36,14 +36,14 @@ class Constants(BaseConstants):
     # It should contain the text of the variable part for a given round
     # {placeholder} will be replace with the items of the array
     list_of_variable_option_texts = [
-        "${placeholder} with a probability of 20%",
+        "Today: $5, One Month: ${placeholder} for sure",
         "$7 with a probability of {placeholder}%",
         "$10 with a probability of {placeholder}%",
     ]
     # the list below contains one sublist per round
     # each sublist contains the options displayed in this round
     list_of_lists_of_variable_options = [
-        [4 + x for x in np.arange(0, 10.25, 0.25).tolist()],
+        [5 + x for x in np.arange(0, 10.25, 0.25).tolist()],
         [10, 60],
         [65, 75, 85, 95],
     ]
@@ -57,8 +57,6 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    # MOVE THIS TO MPL APP
-
     # the field contains one record per choice that is either f for fixed or v for variable
     # since we cannot store lists in the database we store the information as a string.
     # If it is needed as a list again (e.g. for payoff calculation) it can be converted 
@@ -85,7 +83,7 @@ class Player(BasePlayer):
 
 class InstructionsStageTwo(Page):
     def is_displayed(player: Player):
-        return True
+        return player.round_number == 1
 
 class MplPage(Page):
     def is_displayed(player: Player):

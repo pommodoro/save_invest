@@ -3,7 +3,7 @@ import json
 import random
 
 doc = """
-Your app description
+Stage 1 of save invest experiment
 """
 
 
@@ -14,44 +14,12 @@ class Constants(BaseConstants):
 
     order_max = 42 #number of unique rounds in stage1-1
 
-    # move this next line to mpl app
-    order_max_s2 = 2 #number of unique rounds in stage 2
-
     # randomize order of rounds
     round_order = list(range(1, order_max, 1)) #round order is range from 1 to 43 (or number of unique rounds)
 
     # print("Original: ", round_order)
     random.shuffle(round_order)
     # print("1 shuffle: ", round_order)
-
-    ### MOVE THE BELOW TO MPL APP
-    # if the variable below is True, then the variable part of the MPL is displayed on the right, 
-    # otherwise it is displayed on the left
-    display_variable_right = True
-
-    # the list below should contain 1 entry per round
-    list_of_fixed_options = [
-        "A payoff of $1 for sure",
-        "A payoff of $4 for sure",
-        "A payoff of $8 for sure",
-    ]
-    # The list below should contain 1 entry per round
-    # It should contain the text of the variable part for a given round
-    # {placeholder} will be replace with the items of the array
-    list_of_variable_option_texts = [
-        "$3 with a probability of {placeholder}%",
-        "$7 with a probability of {placeholder}%",
-        "$10 with a probability of {placeholder}%",
-    ]
-    # the list below contains one sublist per round
-    # each sublist contains the options displayed in this round
-    list_of_lists_of_variable_options = [
-        [20, 40, 60],
-        [10, 60],
-        [65, 75, 85, 95],
-    ]
-
-    ### MOVE THE ABOVE TO MPL APP
 
     # repeating the fixed endowment (10) the total number of unique comparisons + 1 since we are never in round 0
     endowment = [10] * 43
@@ -89,15 +57,6 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    # MOVE THIS TO MPL APP
-
-    # the field contains one record per choice that is either f for fixed or v for variable
-    # since we cannot store lists in the database we store the information as a string.
-    # If it is needed as a list again (e.g. for payoff calculation) it can be converted 
-    # back into a list by importing the json module and using using json.loads()
-    options_chosen = models.StringField()
-
-    # ABOVE GOES TO MPL APP
 
     # Comprehension Question Fields
     comp_instant = models.FloatField()
@@ -137,142 +96,7 @@ class Player(BasePlayer):
     payoff_oneMonth = models.CurrencyField()
 
     make_changes = models.BooleanField()
-
-    stage1_round = models.IntegerField()
-    choice1 = models.IntegerField(
-        choices = [
-            [1, ''],
-            [2, ''],
-        ],
-        widget = widgets.RadioSelectHorizontal
-    )
-    choice2 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget = widgets.RadioSelectHorizontal
-    )
-    choice3 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget = widgets.RadioSelectHorizontal
-    )
-    choice4 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget = widgets.RadioSelectHorizontal
-    )
-    choice5 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
-    choice6 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget = widgets.RadioSelectHorizontal
-    )
-    choice7 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
-    choice8 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
-    choice9 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
-    choice10 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
-    choice11 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
-    choice12 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
-    choice13 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget = widgets.RadioSelectHorizontal
-    )
-    choice14 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
-    choice15 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
-    choice16 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
-    choice17 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
-    choice18 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
-    choice19 = models.IntegerField(
-        choices=[
-            [1, ''],
-            [2, ''],
-        ],
-        widget=widgets.RadioSelectHorizontal
-    )
-
+    
 
 #Error Messages for incorrect user inputs
 def comp_instant_error_message(player, value):
