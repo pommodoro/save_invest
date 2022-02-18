@@ -85,6 +85,24 @@ class InstructionsStageTwo(Page):
     def is_displayed(player: Player):
         return player.round_number == 1
 
+    @staticmethod
+    def vars_for_template(player):
+    #DELETE THIS ONLY A TESTER
+        monthA = player.participant.monthA
+        monthB = player.participant.monthB
+        savings = player.participant.savings
+        probA = player.participant.probA
+        probB = player.participant.probB
+
+    
+        return dict(
+            monthA_display=monthA,
+            monthB_display=monthB,
+            savings_display=savings,
+            probA_display=probA,
+            probB_display=probB
+        )
+
 class MplPage(Page):
     def is_displayed(player: Player):
         return True

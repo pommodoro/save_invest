@@ -77,6 +77,7 @@ class Player(BasePlayer):
     #Round Choices
     savings = models.CurrencyField(min = 0, max = 10)
     investA = models.CurrencyField()
+    investB = models.CurrencyField()
 
     # set min value for input in investA
     def investA_min(player):
@@ -87,14 +88,11 @@ class Player(BasePlayer):
     # set max value for input in investA
     def investA_max(player):
         return player.round_endowment - player.savings
-
-    investB = models.CurrencyField()
-
+        
     #Payoffs
     paying_asset = models.StringField()
     payoff_today = models.CurrencyField()
     payoff_oneMonth = models.CurrencyField()
-
     make_changes = models.BooleanField()
     
 
@@ -244,7 +242,6 @@ class Confirm(Page):
         prev_player = player.in_round(player.round_number - 1)
         if (prev_player.make_changes == False and prev_player.counter == Constants.order_max):
             return False
-
         return True
 
     form_model = 'player'
@@ -253,7 +250,6 @@ class Confirm(Page):
     @staticmethod
     def vars_for_template(player):
         #writes choices for use in pages
-
         order = Constants.round_order[player.counter]
         endowment = Constants.endowment[order]
         probA = Constants.probA[order]
@@ -299,9 +295,26 @@ class Confirm(Page):
 
     @staticmethod
     def before_next_page(player, timeout_happened):
+        # point to the participant attribute
+        participant = player.participant
+
         # write investB to data
         player.investB = player.round_endowment - player.savings - player.investA
 
+        # initialize participant lists, write all data to participant fields
+        participant.monthA = []
+        participant.monthB = []
+        participant.probA = []
+        participant.probB = []
+        participant.savings = []
+
+        order = Constants.round_order[player.counter]
+        participant.monthA.append(Constants.returnA[order] * player.investA)
+        participant.monthB.append(max(0, Constants.returnB[order] * (Constants.endowment[order] - player.savings - player.investA)))
+        participant.probA.append(player.round_probA)
+        participant.probB.append(player.round_probB)
+        participant.savings.append(player.savings)
+        
         #stage 2 will now play if it is the last stage 1 round
         # DELETE THIS SINCE WE WILL WRITE THIS AS A SEPARATE APP
         if (player.make_changes == False and player.counter == Constants.order_max):
@@ -310,8 +323,7 @@ class Confirm(Page):
         # CHECK IF THIS IS THE LAST ROUND AND THERE WERE NO CHANGES 
         if player.counter == Constants.order_max and player.make_changes == False:
 
-            # point to the participant attribute
-            participant = player.participant
+    
 
             # then define the paying round
             paying_round = random.randint(0,Constants.order_max)

@@ -6,7 +6,6 @@ SESSION_CONFIGS = [
         app_sequence=[
         'stage1',
          'stage2'],
-
         num_demo_participants=1,
     ),
 ]
@@ -26,7 +25,12 @@ PARTICIPANT_FIELDS = ['paying_round',
 	'paying_choice_number_s2',
 	'paying_asset_s2',
 	'paying_round_order',
-	'paying_asset' ]
+	'paying_asset',
+    'monthA',
+    'monthB',
+    'probA',
+    'probB',
+    'savings' ]
 	
 SESSION_FIELDS = ['order']
 
