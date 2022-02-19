@@ -8,16 +8,16 @@ Stage 2 (MPL) of save invest experiment
 """
 
 
-class Constants(BaseConstants):
-    name_in_url = 'stage2'
-    players_per_group = None
-    num_rounds = 32
+class C(BaseConstants):
+    NAME_IN_URL = 'stage2'
+    PLAYERS_PER_GROUP = None
+    NUM_ROUNDS = 32
 
     # round order will not be randomized
 
     # if the variable below is True, then the variable part of the MPL is displayed on the right, 
     # otherwise it is displayed on the left
-    display_variable_right = True
+    DISPLAY_VARIABLE_RIGHT = True
 
     # # Initialize the format of the fixed option
     # list_of_fixed_options = [
@@ -29,12 +29,12 @@ class Constants(BaseConstants):
     # The list below should contain 1 entry per round
     # It should contain the text of the variable part for a given round
     # {placeholder} will be replace with the items of the array
-    list_of_variable_option_texts = [
+    LIST_OF_VARIABLE_OPTION_TEXTS = [
         "Today:{today} , One Month: ${one_month} for sure"
     ]*32
     # the list below contains one sublist per round
     # each sublist contains the options displayed in this round
-    list_of_variable_options = [
+    LIST_OF_VARIABLE_OPTIONS = [
         x for x in np.arange(0, 31, 0.50).tolist()
     ]
 
@@ -105,10 +105,10 @@ class MplPage(Page):
 
 
         # RHS range of future payoffs from $0 to $30 for sure
-        variable_range = Constants.list_of_variable_options.copy()
+        variable_range = C.LIST_OF_VARIABLE_OPTIONS.copy()
 
         # RHS text
-        variable_options_text_this_round = Constants.list_of_variable_option_texts[player.round_number - 1]
+        variable_options_text_this_round = C.LIST_OF_VARIABLE_OPTION_TEXTS[player.round_number - 1]
 
         # Intialize empty lists
         list_of_fixed_options = []

@@ -7,7 +7,7 @@
     <p id="text">
  In this question you will be asked to choose between your choices in stage one and a variable amount in the future. Your choice for [INSERT ROUND NUMBER??] was to receive {{ savings_display }} today and {{ monthA_display }} in a month with {{ probA_display }} probability or {{ monthB_display}} with {{ probB_display }} probability. For brevity, these will be displayed as "Option A" in the left-hand side. The options on the right are all {{ savings_display }} today and a variable, increasing amount in the future for sure. FINISH EXPLAINING HOW THE OPTIONS WORK.
     </p>
-    {{ if Constants.display_variable_right }}
+    {{ if C.DISPLAY_VARIABLE_RIGHT }}
         <div id="fixed_option_div" style="width:45%;float:left">
         {{ for id_variable_pair in list_of_fixed_options }}
             <input type="radio" id="{{ id_variable_pair.0 }}" onclick="check_other_buttons('{{ id_variable_pair.0 }}')">

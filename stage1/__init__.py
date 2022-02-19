@@ -7,42 +7,42 @@ Stage 1 of save invest experiment
 """
 
 
-class Constants(BaseConstants):
-    name_in_url = 'mplApp'
-    players_per_group = None
-    num_rounds = 1
+class C(BaseConstants):
+    NAME_IN_URL = 'mplApp'
+    PLAYERS_PER_GROUP = None
+    NUM_ROUNDS = 3
 
-    order_max = 42 #number of unique rounds in stage1-1
+    ORDER_MAX = 42 #number of unique rounds in stage1-1
 
     # randomize order of rounds
-    round_order = list(range(1, order_max, 1)) #round order is range from 1 to 43 (or number of unique rounds)
+    ROUND_ORDER = list(range(1, ORDER_MAX, 1)) #round order is range from 1 to 43 (or number of unique rounds)
 
-    # print("Original: ", round_order)
-    random.shuffle(round_order)
-    # print("1 shuffle: ", round_order)
+    # print("Original: ", ROUND_ORDER)
+    random.shuffle(ROUND_ORDER)
+    # print("1 shuffle: ", ROUND_ORDER)
 
-    # repeating the fixed endowment (10) the total number of unique comparisons + 1 since we are never in round 0
-    endowment = [10] * 43
+    # repeating the fixed ENDOWMENT (10) the total number of unique comparisons + 1 since we are never in round 0
+    ENDOWMENT = [10] * 43
 
     # populating probability A
-    probA = [0, 1, 0.1,  0.55, 1, 1, 1, 1, 1, 1,
+    PROBA = [0, 1, 0.1,  0.55, 1, 1, 1, 1, 1, 1,
     1, 1, 1, 1, 0.95, 0.8, 0.3, 0.6, 0.5, 0.95,
     0.2, 0.7, 0.4, 0.5, 0.05, 0.8, 0.3, 0.6, 0.5, 0.95,
     0.2, 0.7, 0.4, 0.5, 0.05, 0.8, 0.3, 0.6, 0.5, 0.95, 
     0.2, 0.7, 0.4, 0.5]
 
     # populating probability B
-    probB = [round(1 - p, 2) for p in probA]
+    PROBB = [round(1 - p, 2) for p in PROBA]
 
     # populating return to A
-    returnA = [0, 2.1,1.9, 2.7, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 
+    RETURNA = [0, 2.1,1.9, 2.7, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 
     1.6, 1.7, 1.8, 1.9, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7,
     1.7, 1.7, 1.7, 1.7, 2.4, 2.4, 2.4, 2.4, 2.4, 2.4,
     2.4, 2.4, 2.4, 2.4, 2.2, 2.2, 2.2, 2.2, 2.2, 2.2,
     2.2, 2.2, 2.2, 2.2]
 
     # populating return to B
-    returnB = [0, -1, 2.3, 1.6, -1, -1, -1, -1, -1, -1,
+    RETURNB = [0, -1, 2.3, 1.6, -1, -1, -1, -1, -1, -1,
     -1, -1, -1, -1, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5,
     2.5, 2.5, 2.5, 2.5, 2.5, 1.8, 1.8, 1.8, 1.8, 1.8,
     1.8, 1.8, 1.8, 1.8, 2, 2, 2, 2, 2, 2, 2,
@@ -113,6 +113,12 @@ def comp_prob2_error_message(player, value):
      if value != 40:
          return 'Incorrect. Try Again.'
 
+def investA_error_message(player, value):
+    if value > (player.round_endowment - player.savings):
+        return 'Cannot invest more than is available after savings'
+    if value < 0:
+        return 'Investment must be zero or greater'
+
 # PAGES
 class InstructionsStageOne(Page):
     def is_displayed(player):
@@ -124,7 +130,7 @@ class InstructionsStageOne(Page):
         participant = player.participant
 
         # write the order to data
-        participant.round_order = Constants.round_order.copy()
+        participant.round_order = C.ROUND_ORDER.copy()
 
 
 
@@ -150,9 +156,9 @@ class SaveToday(Page):
 
         prev_player = player.in_round(player.round_number - 1)
 
-        if (prev_player.make_changes == False and prev_player.counter == Constants.order_max):
+        if (prev_player.make_changes == False and prev_player.counter == C.ORDER_MAX):
             player.make_changes = False
-            player.counter = Constants.order_max
+            player.counter = C.ORDER_MAX
             player.round_order = 0
             player.round_endowment = 0
             player.round_probA = 0
@@ -182,12 +188,12 @@ class SaveToday(Page):
         else:
             player.counter = 0
 
-        order = Constants.round_order[player.counter] # if (player.counter <Constants.order_max+1) else 0
-        endowment = Constants.endowment[order]
-        probA = Constants.probA[order]
-        returnA = Constants.returnA[order]
-        probB = Constants.probB[order]
-        returnB = Constants.returnB[order]
+        order = C.ROUND_ORDER[player.counter] # if (player.counter <C.ORDER_MAX+1) else 0
+        endowment = C.ENDOWMENT[order]
+        probA = C.PROBA[order]
+        returnA = C.RETURNA[order]
+        probB = C.PROBB[order]
+        returnB = C.RETURNB[order]
 
         return dict(
             endowment_display=endowment,
@@ -201,12 +207,12 @@ class SaveToday(Page):
     @staticmethod
     def before_next_page(player, timeout_happened):
         #writing to memory after clicking submit
-        player.round_order = Constants.round_order[player.counter]
-        player.round_endowment = Constants.endowment[player.round_order]
-        player.round_probA = Constants.probA[player.round_order]
-        player.round_returnA = Constants.returnA[player.round_order]
-        player.round_probB = Constants.probB[player.round_order]
-        player.round_returnB = Constants.returnB[player.round_order]
+        player.round_order = C.ROUND_ORDER[player.counter]
+        player.round_endowment = C.ENDOWMENT[player.round_order]
+        player.round_probA = C.PROBA[player.round_order]
+        player.round_returnA = C.RETURNA[player.round_order]
+        player.round_probB = C.PROBB[player.round_order]
+        player.round_returnB = C.RETURNB[player.round_order]
 
 
 class InvestA(Page):
@@ -217,7 +223,7 @@ class InvestA(Page):
         if (player.round_number == 1):
             return True
         prev_player = player.in_round(player.round_number - 1)
-        if (prev_player.make_changes == False and prev_player.counter == Constants.order_max):
+        if (prev_player.make_changes == False and prev_player.counter == C.ORDER_MAX):
             return False
         return True
 
@@ -226,13 +232,13 @@ class InvestA(Page):
 
     @staticmethod
     def vars_for_template(player):
-        order = Constants.round_order[player.counter]
-        endowment = Constants.endowment[order]
-        probA = Constants.probA[order]
-        returnA = Constants.returnA[order]
-        probB = Constants.probB[order]
-        returnB = Constants.returnB[order]
-        max_investA = Constants.endowment[order] - player.savings
+        order = C.ROUND_ORDER[player.counter]
+        endowment = C.ENDOWMENT[order]
+        probA = C.PROBA[order]
+        returnA = C.RETURNA[order]
+        probB = C.PROBB[order]
+        returnB = C.RETURNB[order]
+        max_investA = C.ENDOWMENT[order] - player.savings
 
         return dict(
             endowment_display=endowment,
@@ -250,7 +256,7 @@ class Confirm(Page):
             return True
 
         prev_player = player.in_round(player.round_number - 1)
-        if (prev_player.make_changes == False and prev_player.counter == Constants.order_max):
+        if (prev_player.make_changes == False and prev_player.counter == C.ORDER_MAX):
             return False
         return True
 
@@ -260,18 +266,18 @@ class Confirm(Page):
     @staticmethod
     def vars_for_template(player):
         #writes choices for use in pages
-        order = Constants.round_order[player.counter]
-        endowment = Constants.endowment[order]
-        probA = Constants.probA[order]
-        returnA = Constants.returnA[order]
-        probB = Constants.probB[order]
-        returnB = Constants.returnB[order]
-        max_investA = Constants.endowment[order] - player.savings
-        investB = Constants.endowment[order] - player.savings - player.investA
+        order = C.ROUND_ORDER[player.counter]
+        endowment = C.ENDOWMENT[order]
+        probA = C.PROBA[order]
+        returnA = C.RETURNA[order]
+        probB = C.PROBB[order]
+        returnB = C.RETURNB[order]
+        max_investA = C.ENDOWMENT[order] - player.savings
+        investB = C.ENDOWMENT[order] - player.savings - player.investA
         money_today = player.savings
-        money_onemonthA = Constants.returnA[order] * player.investA
-        money_onemonthB = max(0, Constants.returnB[order] * (
-                        Constants.endowment[order] - player.savings - player.investA))
+        money_onemonthA = C.RETURNA[order] * player.investA
+        money_onemonthB = max(0, C.RETURNB[order] * (
+                        C.ENDOWMENT[order] - player.savings - player.investA))
 
         return dict(
             endowment_display=endowment,
@@ -289,10 +295,10 @@ class Confirm(Page):
 
     #for the barchart
     def js_vars(player):
-        order = Constants.round_order[player.counter]
+        order = C.ROUND_ORDER[player.counter]
         money_today = player.savings
-        money_onemonthA = Constants.returnA[order] * player.investA
-        money_onemonthB = max(0,Constants.returnB[order] * (Constants.endowment[order] - player.savings - player.investA))
+        money_onemonthA = C.RETURNA[order] * player.investA
+        money_onemonthB = max(0,C.RETURNB[order] * (C.ENDOWMENT[order] - player.savings - player.investA))
         chart_series = [money_today, money_onemonthA, money_onemonthB]
 
         return dict(
@@ -318,25 +324,25 @@ class Confirm(Page):
         participant.probB = []
         participant.savings = []
 
-        order = Constants.round_order[player.counter]
-        participant.monthA.append(Constants.returnA[order] * player.investA)
-        participant.monthB.append(max(0, Constants.returnB[order] * (Constants.endowment[order] - player.savings - player.investA)))
+        order = C.ROUND_ORDER[player.counter]
+        participant.monthA.append(C.RETURNA[order] * player.investA)
+        participant.monthB.append(max(0, C.RETURNB[order] * (C.ENDOWMENT[order] - player.savings - player.investA)))
         participant.probA.append(player.round_probA)
         participant.probB.append(player.round_probB)
         participant.savings.append(player.savings)
         
         #stage 2 will now play if it is the last stage 1 round
         # DELETE THIS SINCE WE WILL WRITE THIS AS A SEPARATE APP
-        if (player.make_changes == False and player.counter == Constants.order_max):
+        if (player.make_changes == False and player.counter == C.ORDER_MAX):
             subsession.order = 1
 
         # CHECK IF THIS IS THE LAST ROUND AND THERE WERE NO CHANGES 
-        if player.counter == Constants.order_max and player.make_changes == False:
+        if player.counter == C.ORDER_MAX and player.make_changes == False:
 
     
 
             # then define the paying round
-            paying_round = random.randint(0,Constants.order_max)
+            paying_round = random.randint(0,C.ORDER_MAX)
             participant.paying_round = paying_round
 
 
@@ -378,9 +384,9 @@ class MplPage(Page):
 
     @staticmethod
     def vars_for_template(player: Player):
-        fixed_option_this_round = Constants.list_of_fixed_options[player.round_number - 1]
-        variables_this_round = Constants.list_of_lists_of_variable_options[player.round_number - 1]
-        variable_options_text_this_round = Constants.list_of_variable_option_texts[player.round_number - 1]
+        fixed_option_this_round = C.LIST_OF_FIXED_OPTIONS[player.round_number - 1]
+        variables_this_round = C.LIST_OF_LISTS_OF_VARIABLE_OPTIONS[player.round_number - 1]
+        variable_options_text_this_round = C.LIST_OF_VARIABLE_OPTION_TEXTS[player.round_number - 1]
         list_of_variable_options = []
         list_of_fixed_options = []
         for i, variable in enumerate(variables_this_round):
