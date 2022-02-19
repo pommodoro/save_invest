@@ -118,6 +118,16 @@ class InstructionsStageOne(Page):
     def is_displayed(player):
         return player.round_number == 1
 
+    @staticmethod
+    def before_next_page(player, timeout_happened):
+        # point to the participant attribute
+        participant = player.participant
+
+        # write the order to data
+        participant.round_order = Constants.round_order.copy()
+
+
+
 class ComprehensionStageOne1(Page):
     def is_displayed(player):
         return player.round_number == 1

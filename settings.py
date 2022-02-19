@@ -19,7 +19,9 @@ SESSION_CONFIG_DEFAULTS = dict(
     real_world_currency_per_point=1.00, participation_fee=0.00, doc=""
 )
 
-PARTICIPANT_FIELDS = ['paying_round', 
+PARTICIPANT_FIELDS = [
+    'round_order',
+    'paying_round', 
 	'paying_asset_number',
 	'paying_order_s2',
 	'paying_choice_number_s2',
@@ -30,9 +32,10 @@ PARTICIPANT_FIELDS = ['paying_round',
     'monthB',
     'probA',
     'probB',
-    'savings' ]
+    'savings' 
+    ]
 	
-SESSION_FIELDS = ['order']
+SESSION_FIELDS = []
 
 # ISO-639 code
 # for example: de, fr, ja, ko, zh-hans
