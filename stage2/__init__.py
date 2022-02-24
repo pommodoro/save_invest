@@ -15,7 +15,7 @@ class C(BaseConstants):
 
     # round order will not be randomized
 
-    # if the variable below is True, then the variable part of the MPL is displayed on the right, 
+    # if the variable below is True, then the variable part of the MPL is displayed on the right,
     # otherwise it is displayed on the left
     DISPLAY_VARIABLE_RIGHT = True
 
@@ -40,7 +40,8 @@ class C(BaseConstants):
 
 
 class Subsession(BaseSubsession):
-    pass 
+    pass
+
 
 class Group(BaseGroup):
     pass
@@ -49,11 +50,12 @@ class Group(BaseGroup):
 class Player(BasePlayer):
     # the field contains one record per choice that is either f for fixed or v for variable
     # since we cannot store lists in the database we store the information as a string.
-    # If it is needed as a list again (e.g. for payoff calculation) it can be converted 
+    # If it is needed as a list again (e.g. for payoff calculation) it can be converted
     # back into a list by importing the json module and using using json.loads()
     options_chosen = models.StringField()
 
 # PAGES
+
 
 class InstructionsStageTwo(Page):
     def is_displayed(player: Player):
@@ -61,23 +63,25 @@ class InstructionsStageTwo(Page):
 
     @staticmethod
     def vars_for_template(player):
-    #CREATING THE LISTS FOR DISPLAY
+        # CREATING THE LISTS FOR DISPLAY
         monthA = player.participant.monthA
         monthB = player.participant.monthB
         savings = player.participant.savings
         probA = player.participant.probA
         probB = player.participant.probB
         order = player.participant.round_order
+        counter = player.participant.counter
 
-    
         return dict(
             monthA_display=monthA,
             monthB_display=monthB,
             savings_display=savings,
             probA_display=probA,
             probB_display=probB,
-            order_display=order
+            order_display=order,
+            counter_display=counter
         )
+
 
 class MplPage(Page):
     def is_displayed(player: Player):
@@ -89,38 +93,41 @@ class MplPage(Page):
     @staticmethod
     def vars_for_template(player: Player):
         # savings selected in the round number
-        payment_today = player.participant.savings[player.round_number - 1]
+        payment_today = player.in_round(player.round_number).participant.savings
 
         # returns from invested amount in A and rate
-        monthA = player.participant.monthA[player.round_number - 1]
+        monthA = player.in_round(player.round_number).participant.monthA
 
         # returns from invested amount in B and rate
-        monthB = player.participant.monthB[player.round_number - 1]
+        monthB = player.in_round(player.round_number).participant.monthB
 
         # probability of asset A being picked
-        probA = player.participant.probA[player.round_number - 1]
+        probA = player.in_round(player.round_number).participant.probA
 
         # probability of asset B being picked
-        probB = player.participant.probB[player.round_number - 1]
+        probB = player.in_round(player.round_number).participant.probB
 
+        # num order
+        counter = player.in_round(player.round_number).participant.counter
 
         # RHS range of future payoffs from $0 to $30 for sure
         variable_range = C.LIST_OF_VARIABLE_OPTIONS.copy()
 
         # RHS text
-        variable_options_text_this_round = C.LIST_OF_VARIABLE_OPTION_TEXTS[player.round_number - 1]
+        variable_options_text_this_round = C.LIST_OF_VARIABLE_OPTION_TEXTS[
+            player.round_number - 1]
 
         # Intialize empty lists
         list_of_fixed_options = []
         list_of_variable_options = []
 
         for i, variable in enumerate(variable_range):
-            id_text_pair_variable = ["v"+str(i), variable_options_text_this_round.format(today=payment_today, one_month=variable)]
+            id_text_pair_variable = [
+                "v"+str(i), variable_options_text_this_round.format(today=payment_today, one_month=variable)]
             id_text_pair_fixed = ["f"+str(i), "Option A"]
             list_of_fixed_options.append(id_text_pair_fixed)
             list_of_variable_options.append(id_text_pair_variable)
         number_of_options = len(list_of_fixed_options)
-
 
         return {
             "number_of_options": number_of_options,
@@ -130,8 +137,10 @@ class MplPage(Page):
             "monthB_display": monthB,
             "savings_display": payment_today,
             "probA_display": probA,
-            "probB_display": probB
+            "probB_display": probB*100,
+            "counter_display": counter
         }
+
 
 class Results(Page):
     def is_displayed(player: Player):
@@ -143,6 +152,7 @@ class Results(Page):
         return {
             "list_of_choices": list_of_choices,
         }
+
 
 page_sequence = [
     InstructionsStageTwo,

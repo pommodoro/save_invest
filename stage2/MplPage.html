@@ -1,41 +1,48 @@
 {{ block title }}
-    Please make a choice
+Please make a choice
 {{ endblock }}
 
 {{ block content }}
 
-    <p id="text">
- In this question you will be asked to choose between your choices in stage one and a variable amount in the future. Your choice for [INSERT ROUND NUMBER??] was to receive {{ savings_display }} today and {{ monthA_display }} in a month with {{ probA_display }} probability or {{ monthB_display}} with {{ probB_display }} probability. For brevity, these will be displayed as "Option A" in the left-hand side. The options on the right are all {{ savings_display }} today and a variable, increasing amount in the future for sure. FINISH EXPLAINING HOW THE OPTIONS WORK.
-    </p>
-    {{ if C.DISPLAY_VARIABLE_RIGHT }}
-        <div id="fixed_option_div" style="width:45%;float:left">
-        {{ for id_variable_pair in list_of_fixed_options }}
-            <input type="radio" id="{{ id_variable_pair.0 }}" onclick="check_other_buttons('{{ id_variable_pair.0 }}')">
-            <label for="{{ id_variable_pair.0 }}">{{ id_variable_pair.1 }}</label><br>
-        {{ endfor }}
-        </div>
-        <div id="variable_option_div" style="width:45%; margin-right: 10%;float:left">
-            {{ for id_variable_pair in list_of_variable_options }}
-                <input type="radio" id="{{ id_variable_pair.0 }}" onclick="check_other_buttons('{{ id_variable_pair.0 }}')">
-                <label for="{{ id_variable_pair.0 }}">{{ id_variable_pair.1 }}</label><br>
-            {{ endfor }}
-        </div>
-    {{ else }}
-        <div id="variable_option_div" style="width:45%; margin-right: 10%;float:left">
-            {{ for id_variable_pair in list_of_variable_options }}
-                <input type="radio" id="{{ id_variable_pair.0 }}" onclick="check_other_buttons('{{ id_variable_pair.0 }}')">
-                <label for="{{ id_variable_pair.0 }}">{{ id_variable_pair.1 }}</label><br>
-            {{ endfor }}
-        </div>
-        <div id="fixed_option_div" style="width:45%;float:left">
-            {{ for id_variable_pair in list_of_fixed_options }}
-                <input type="radio" id="{{ id_variable_pair.0 }}" onclick="check_other_buttons('{{ id_variable_pair.0 }}')">
-                <label for="{{ id_variable_pair.0 }}">{{ id_variable_pair.1 }}</label><br>
-            {{ endfor }}
-        </div>
-    {{ endif }}
-    <button type="button" onClick="submit_page()" class="otree-btn-next btn btn-primary">Next</button>
-    <input type="hidden" id="options_chosen_input" name="options_chosen">
+<p id="text">
+    In this question you will be asked to choose between your choices in Stage One and a variable amount in the
+    future.<br><br>
+    Your choice for round {{ counter_display }} was to receive {{ savings_display }} today and {{ monthA_display }} in a
+    month with {{ probA_display }}% probability or {{ monthB_display}} with {{ probB_display }}% probability. For
+    brevity, these will be displayed as "Option A" in the left-hand side. The options on the right are all {{
+    savings_display }} today and a variable, increasing amount in the future for sure. <br><br>
+    When you select a row, all options above it on the left "Option A" column will be automatically selected, while all options below it
+    on the right column will be selected.<br><br>
+</p>
+{{ if C.DISPLAY_VARIABLE_RIGHT }}
+<div id="fixed_option_div" style="width:45%;float:left">
+    {{ for id_variable_pair in list_of_fixed_options }}
+    <input type="radio" id="{{ id_variable_pair.0 }}" onclick="check_other_buttons('{{ id_variable_pair.0 }}')">
+    <label for="{{ id_variable_pair.0 }}">{{ id_variable_pair.1 }}</label><br>
+    {{ endfor }}
+</div>
+<div id="variable_option_div" style="width:45%; margin-right: 10%;float:left">
+    {{ for id_variable_pair in list_of_variable_options }}
+    <input type="radio" id="{{ id_variable_pair.0 }}" onclick="check_other_buttons('{{ id_variable_pair.0 }}')">
+    <label for="{{ id_variable_pair.0 }}">{{ id_variable_pair.1 }}</label><br>
+    {{ endfor }}
+</div>
+{{ else }}
+<div id="variable_option_div" style="width:45%; margin-right: 10%;float:left">
+    {{ for id_variable_pair in list_of_variable_options }}
+    <input type="radio" id="{{ id_variable_pair.0 }}" onclick="check_other_buttons('{{ id_variable_pair.0 }}')">
+    <label for="{{ id_variable_pair.0 }}">{{ id_variable_pair.1 }}</label><br>
+    {{ endfor }}
+</div>
+<div id="fixed_option_div" style="width:45%;float:left">
+    {{ for id_variable_pair in list_of_fixed_options }}
+    <input type="radio" id="{{ id_variable_pair.0 }}" onclick="check_other_buttons('{{ id_variable_pair.0 }}')">
+    <label for="{{ id_variable_pair.0 }}">{{ id_variable_pair.1 }}</label><br>
+    {{ endfor }}
+</div>
+{{ endif }}
+<button type="button" onClick="submit_page()" class="otree-btn-next btn btn-primary">Next</button>
+<input type="hidden" id="options_chosen_input" name="options_chosen">
 
 
 
@@ -44,8 +51,8 @@
 <script>
     // initialise a variable for the chosen options that is overwritten every time a choice is made
     let options_chosen;
-    let number_of_options = {{ number_of_options|json }};
-    function check_other_buttons(button_id){
+    let number_of_options = {{ number_of_options| json }};
+    function check_other_buttons(button_id) {
         // initialise an empty array for the chosen options
         options_chosen = []
         let input_number = parseInt(button_id.match(/\d+$/)[0], 10);
@@ -53,23 +60,23 @@
         let input_type = button_id[0]
 
         // check the other buttons
-        for (let i=0;i<number_of_options;i++){
-            if (input_type == 'f'){
-                if (i <= input_number){
+        for (let i = 0; i < number_of_options; i++) {
+            if (input_type == 'f') {
+                if (i <= input_number) {
                     document.getElementById('f'.concat(i.toString())).checked = true;
                     document.getElementById('v'.concat(i.toString())).checked = false;
                     options_chosen.push('f');
-                } else if (i > input_number){
+                } else if (i > input_number) {
                     document.getElementById('f'.concat(i.toString())).checked = false;
                     document.getElementById('v'.concat(i.toString())).checked = true;
                     options_chosen.push('v');
                 }
             } else {
-                if (i < input_number){
+                if (i < input_number) {
                     document.getElementById('f'.concat(i.toString())).checked = true;
                     document.getElementById('v'.concat(i.toString())).checked = false;
                     options_chosen.push('f');
-                } else if (i >= input_number){
+                } else if (i >= input_number) {
                     document.getElementById('f'.concat(i.toString())).checked = false;
                     document.getElementById('v'.concat(i.toString())).checked = true;
                     options_chosen.push('v');
@@ -78,8 +85,8 @@
         }
         document.getElementById("options_chosen_input").value = JSON.stringify(options_chosen);
     }
-    function submit_page(){
-        if( typeof options_chosen == 'undefined' ) {
+    function submit_page() {
+        if (typeof options_chosen == 'undefined') {
             alert("Please select an option");
         } else {
             document.getElementById("form").submit();

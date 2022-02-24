@@ -76,7 +76,7 @@ class Player(BasePlayer):
 
     #Round Choices
     savings = models.CurrencyField(min = 0, max = 10)
-    investA = models.CurrencyField()
+    investA = models.CurrencyField(min = 0, max = 10)
     investB = models.CurrencyField()
 
     # set min value for input in investA
@@ -323,6 +323,7 @@ class Confirm(Page):
         participant.probA = []
         participant.probB = []
         participant.savings = []
+        participant.counter = []
 
         order = C.ROUND_ORDER[player.counter]
         participant.monthA.append(C.RETURNA[order] * player.investA)
@@ -330,6 +331,7 @@ class Confirm(Page):
         participant.probA.append(player.round_probA)
         participant.probB.append(player.round_probB)
         participant.savings.append(player.savings)
+        participant.counter.append(player.counter)
         
         #stage 2 will now play if it is the last stage 1 round
         # DELETE THIS SINCE WE WILL WRITE THIS AS A SEPARATE APP
