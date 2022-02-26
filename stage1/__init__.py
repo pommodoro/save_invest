@@ -317,20 +317,23 @@ class Confirm(Page):
         # write investB to data
         player.investB = player.round_endowment - player.savings - player.investA
 
-        # initialize participant lists, write all data to participant fields
-        participant.monthA = []
-        participant.monthB = []
-        participant.probA = []
-        participant.probB = []
-        participant.savings = []
+        if player.round_number == 1:
+            # initialize participant lists if first round
+            participant.monthA = []
+            participant.monthB = []
+            participant.probA = []
+            participant.probB = []
+            participant.savings = []
 
-        order = C.ROUND_ORDER[player.counter]
-        participant.monthA.append(C.RETURNA[order] * player.investA)
-        participant.monthB.append(max(0, C.RETURNB[order] * (C.ENDOWMENT[order] - player.savings - player.investA)))
-        participant.probA.append(player.round_probA)
-        participant.probB.append(player.round_probB)
-        participant.savings.append(player.savings)
-        
+        else:
+
+            order = C.ROUND_ORDER[player.counter]
+            participant.monthA.append(C.RETURNA[order] * player.investA)
+            participant.monthB.append(max(0, C.RETURNB[order] * (C.ENDOWMENT[order] - player.savings - player.investA)))
+            participant.probA.append(player.round_probA)
+            participant.probB.append(player.round_probB)
+            participant.savings.append(player.savings)
+            
         #stage 2 will now play if it is the last stage 1 round
         # DELETE THIS SINCE WE WILL WRITE THIS AS A SEPARATE APP
         if (player.make_changes == False and player.counter == C.ORDER_MAX):
@@ -370,47 +373,6 @@ class Confirm(Page):
             if player.session['paying_asset'] == "B":
                 player_in_paying_round.payoff_oneMonth = max(0, player_in_paying_round.investB * player_in_paying_round.round_returnB)
 
-# MUST MOVE THESE TO MPL APP
-class InstructionsStageTwo(Page):
-    def is_displayed(player: Player):
-        return False
-
-class MplPage(Page):
-    def is_displayed(player: Player):
-        return False
-
-    form_model = "player"
-    form_fields = ["options_chosen"]
-
-    @staticmethod
-    def vars_for_template(player: Player):
-        fixed_option_this_round = C.LIST_OF_FIXED_OPTIONS[player.round_number - 1]
-        variables_this_round = C.LIST_OF_LISTS_OF_VARIABLE_OPTIONS[player.round_number - 1]
-        variable_options_text_this_round = C.LIST_OF_VARIABLE_OPTION_TEXTS[player.round_number - 1]
-        list_of_variable_options = []
-        list_of_fixed_options = []
-        for i, variable in enumerate(variables_this_round):
-            id_text_pair_variable = ["v"+str(i), variable_options_text_this_round.format(placeholder=variable)]
-            id_text_pair_fixed = ["f"+str(i), fixed_option_this_round]
-            list_of_fixed_options.append(id_text_pair_fixed)
-            list_of_variable_options.append(id_text_pair_variable)
-        number_of_options = len(list_of_fixed_options)
-        return {
-            "number_of_options": number_of_options,
-            "list_of_fixed_options": list_of_fixed_options,
-            "list_of_variable_options": list_of_variable_options,
-        }
-
-class Results(Page):
-    def is_displayed(player: Player):
-        return False
-
-    @staticmethod
-    def vars_for_template(player: Player):
-        list_of_choices = json.loads(player.options_chosen)
-        return {
-            "list_of_choices": list_of_choices,
-        }
 ###
 
 page_sequence = [

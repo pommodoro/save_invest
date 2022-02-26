@@ -30,7 +30,7 @@ class C(BaseConstants):
     # It should contain the text of the variable part for a given round
     # {placeholder} will be replace with the items of the array
     LIST_OF_VARIABLE_OPTION_TEXTS = [
-        "Today:{today} , One Month: ${one_month} for sure"
+        "Today: {today}, One Month: ${one_month} for sure"
     ]*32
     # the list below contains one sublist per round
     # each sublist contains the options displayed in this round
@@ -59,25 +59,6 @@ class InstructionsStageTwo(Page):
     def is_displayed(player: Player):
         return player.round_number == 1
 
-    @staticmethod
-    def vars_for_template(player):
-    #CREATING THE LISTS FOR DISPLAY
-        monthA = player.participant.monthA
-        monthB = player.participant.monthB
-        savings = player.participant.savings
-        probA = player.participant.probA
-        probB = player.participant.probB
-        order = player.participant.round_order
-
-    
-        return dict(
-            monthA_display=monthA,
-            monthB_display=monthB,
-            savings_display=savings,
-            probA_display=probA,
-            probB_display=probB,
-            order_display=order
-        )
 
 class MplPage(Page):
     def is_displayed(player: Player):
@@ -98,10 +79,10 @@ class MplPage(Page):
         monthB = player.participant.monthB[player.round_number - 1]
 
         # probability of asset A being picked
-        probA = player.participant.probA[player.round_number - 1]
+        probA = player.participant.probA[player.round_number - 1] * 100
 
         # probability of asset B being picked
-        probB = player.participant.probB[player.round_number - 1]
+        probB = player.participant.probB[player.round_number - 1] * 100
 
 
         # RHS range of future payoffs from $0 to $30 for sure
@@ -133,19 +114,8 @@ class MplPage(Page):
             "probB_display": probB
         }
 
-class Results(Page):
-    def is_displayed(player: Player):
-        return True
-
-    @staticmethod
-    def vars_for_template(player: Player):
-        list_of_choices = json.loads(player.options_chosen)
-        return {
-            "list_of_choices": list_of_choices,
-        }
 
 page_sequence = [
     InstructionsStageTwo,
-    MplPage,
-    Results
+    MplPage
 ]
