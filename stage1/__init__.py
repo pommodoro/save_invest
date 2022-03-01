@@ -10,6 +10,7 @@ Stage 1 of save invest experiment
 class C(BaseConstants):
     NAME_IN_URL = 'mplApp'
     PLAYERS_PER_GROUP = None
+
     NUM_ROUNDS = 3
 
     ORDER_MAX = 42 #number of unique rounds in stage1-1
@@ -325,6 +326,14 @@ class Confirm(Page):
             participant.probB = []
             participant.savings = []
 
+            # write in data to participant list
+            order = C.ROUND_ORDER[player.counter]
+            participant.monthA.append(C.RETURNA[order] * player.investA)
+            participant.monthB.append(max(0, C.RETURNB[order] * (C.ENDOWMENT[order] - player.savings - player.investA)))
+            participant.probA.append(player.round_probA)
+            participant.probB.append(player.round_probB)
+            participant.savings.append(player.savings)
+
         else:
 
             order = C.ROUND_ORDER[player.counter]
@@ -341,8 +350,6 @@ class Confirm(Page):
 
         # CHECK IF THIS IS THE LAST ROUND AND THERE WERE NO CHANGES 
         if player.counter == C.ORDER_MAX and player.make_changes == False:
-
-    
 
             # then define the paying round
             paying_round = random.randint(0,C.ORDER_MAX)
