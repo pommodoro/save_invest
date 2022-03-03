@@ -348,11 +348,17 @@ class Confirm(Page):
         if (player.make_changes == False and player.counter == C.ORDER_MAX):
             subsession.order = 1
 
-        # CHECK IF THIS IS THE LAST ROUND AND THERE WERE NO CHANGES 
-        if player.counter == C.ORDER_MAX and player.make_changes == False:
+        # CHECK IF THIS IS THE LAST ROUND AND THERE WERE NO CHANGES. ORDER_MAX VS NUM_ROUNDS hm
+        if player.counter+1 == C.NUM_ROUNDS and player.make_changes == False:
+
+            # initialize all of the participant fields
+            participant.paying_round = models.IntegerField()
+            participant.paying_asset_number = models.FloatField()
+            participant.paying_round_order = models.IntegerField()
+            participant.paying_asset = models.StringField()
 
             # then define the paying round
-            paying_round = random.randint(0,C.ORDER_MAX)
+            paying_round = random.randint(1,C.NUM_ROUNDS)
             participant.paying_round = paying_round
 
 
@@ -377,7 +383,7 @@ class Confirm(Page):
 
             if participant.paying_asset == "A":
                 player_in_paying_round.payoff_oneMonth = player_in_paying_round.investA * player_in_paying_round.round_returnA
-            if player.session['paying_asset'] == "B":
+            if participant.paying_asset == "B":
                 player_in_paying_round.payoff_oneMonth = max(0, player_in_paying_round.investB * player_in_paying_round.round_returnB)
 
 ###
