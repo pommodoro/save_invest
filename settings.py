@@ -20,6 +20,7 @@ SESSION_CONFIG_DEFAULTS = dict(
 )
 
 PARTICIPANT_FIELDS = [
+    'order',
     'round_order',
     'paying_round', 
 	'paying_asset_number',

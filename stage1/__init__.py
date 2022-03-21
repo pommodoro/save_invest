@@ -11,12 +11,16 @@ class C(BaseConstants):
     NAME_IN_URL = 'mplApp'
     PLAYERS_PER_GROUP = None
 
-    NUM_ROUNDS = 3
+    NUM_ROUNDS = 126
 
-    ORDER_MAX = 42 #number of unique rounds in stage1-1
+    #number of unique rounds -1. Setting this to 1 gives two unique rounds.
+    #There are 43 total comparisons we want to do, so this should be set to 42.
+    ORDER_MAX = 42 
 
     # randomize order of rounds
-    ROUND_ORDER = list(range(1, ORDER_MAX, 1)) #round order is range from 1 to 43 (or number of unique rounds)
+    # round order is range from 0 to 43 (or number of unique rounds)
+    # recall this will be a list of length 43 because it starts at zero and does not include the upper endpoint.
+    ROUND_ORDER = list(range(0, 43, 1))
 
     # print("Original: ", ROUND_ORDER)
     random.shuffle(ROUND_ORDER)
@@ -26,7 +30,7 @@ class C(BaseConstants):
     ENDOWMENT = [10] * 43
 
     # populating probability A
-    PROBA = [0, 1, 0.1,  0.55, 1, 1, 1, 1, 1, 1,
+    PROBA = [1, 0.1,  0.55, 1, 1, 1, 1, 1, 1,
     1, 1, 1, 1, 0.95, 0.8, 0.3, 0.6, 0.5, 0.95,
     0.2, 0.7, 0.4, 0.5, 0.05, 0.8, 0.3, 0.6, 0.5, 0.95,
     0.2, 0.7, 0.4, 0.5, 0.05, 0.8, 0.3, 0.6, 0.5, 0.95, 
@@ -36,14 +40,14 @@ class C(BaseConstants):
     PROBB = [round(1 - p, 2) for p in PROBA]
 
     # populating return to A
-    RETURNA = [0, 2.1,1.9, 2.7, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 
+    RETURNA = [2.1, 1.9, 2.7, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 
     1.6, 1.7, 1.8, 1.9, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7,
     1.7, 1.7, 1.7, 1.7, 2.4, 2.4, 2.4, 2.4, 2.4, 2.4,
     2.4, 2.4, 2.4, 2.4, 2.2, 2.2, 2.2, 2.2, 2.2, 2.2,
     2.2, 2.2, 2.2, 2.2]
 
     # populating return to B
-    RETURNB = [0, -1, 2.3, 1.6, -1, -1, -1, -1, -1, -1,
+    RETURNB = [-1, 2.3, 1.6, -1, -1, -1, -1, -1, -1,
     -1, -1, -1, -1, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5,
     2.5, 2.5, 2.5, 2.5, 2.5, 1.8, 1.8, 1.8, 1.8, 1.8,
     1.8, 1.8, 1.8, 1.8, 2, 2, 2, 2, 2, 2, 2,
@@ -96,6 +100,8 @@ class Player(BasePlayer):
     payoff_oneMonth = models.CurrencyField()
     make_changes = models.BooleanField()
     
+    #Final counter round indicator
+    is_done = models.BooleanField(initial = False)
 
 #Error Messages for incorrect user inputs
 def comp_instant_error_message(player, value):
@@ -151,22 +157,25 @@ class ComprehensionStageOne2(Page):
 
 class SaveToday(Page):
     def is_displayed(player: Player):
-        if (player.round_number == 1):
-            player.session.vars['order'] = 0
-            return True
+        # I THINK NONE OF THIS IS NECESSARY
+        # if (player.round_number == 1):
+        #     player.participant.order = 0
+        #     return True
 
-        prev_player = player.in_round(player.round_number - 1)
+        # prev_player = player.in_round(player.round_number - 1)
 
-        if (prev_player.make_changes == False and prev_player.counter == C.ORDER_MAX):
-            player.make_changes = False
-            player.counter = C.ORDER_MAX
-            player.round_order = 0
-            player.round_endowment = 0
-            player.round_probA = 0
-            player.round_probB = 0
-            player.round_returnA = 0
-            player.round_returnB = 0
-            return False
+        # # what is this if condition supposed to do? it checks that the previous counter was 
+        # # at order max but why do we care?
+        # if (prev_player.make_changes == False and prev_player.counter == C.ORDER_MAX):
+        #     player.make_changes = False
+        #     player.counter = C.ORDER_MAX
+        #     player.round_order = 0
+        #     player.round_endowment = 0
+        #     player.round_probA = 0
+        #     player.round_probB = 0
+        #     player.round_returnA = 0
+        #     player.round_returnB = 0
+        #     return False
         return True
 
     form_model = 'player'
@@ -175,7 +184,14 @@ class SaveToday(Page):
     @staticmethod
     def vars_for_template(player: Player):
         #set the counter
+        # if first round intialize at 0
+        if (player.round_number == 1):
+            player.counter = 0
+
+        # for other rounds do
         if (player.round_number > 1):
+
+            #define the previous player
             prev_player = player.in_round(player.round_number-1)
 
             #if player is altering preferences, counter set to previous round counter
@@ -189,14 +205,27 @@ class SaveToday(Page):
         else:
             player.counter = 0
 
-        order = C.ROUND_ORDER[player.counter] # if (player.counter <C.ORDER_MAX+1) else 0
+
+        # test to see if this is the last round
+        # important because player.counter could be out of round_order range
+        # if (player.counter < C.ORDER_MAX):
+        order = C.ROUND_ORDER[player.counter]
         endowment = C.ENDOWMENT[order]
         probA = C.PROBA[order]
         returnA = C.RETURNA[order]
         probB = C.PROBB[order]
         returnB = C.RETURNB[order]
 
+
+        # order = C.ROUND_ORDER[player.counter] if (player.counter <C.ORDER_MAX) else 0
+        # endowment = C.ENDOWMENT[order]
+        # probA = C.PROBA[order]
+        # returnA = C.RETURNA[order]
+        # probB = C.PROBB[order]
+        # returnB = C.RETURNB[order]
+
         return dict(
+            order_display=order,
             endowment_display=endowment,
             probA_display=probA,
             returnA_display=returnA,
@@ -215,6 +244,9 @@ class SaveToday(Page):
         player.round_probB = C.PROBB[player.round_order]
         player.round_returnB = C.RETURNB[player.round_order]
 
+        if player.counter == C.ORDER_MAX:
+            player.is_done = True
+
 
 class InvestA(Page):
     def is_displayed(player):
@@ -224,7 +256,8 @@ class InvestA(Page):
         if (player.round_number == 1):
             return True
         prev_player = player.in_round(player.round_number - 1)
-        if (prev_player.make_changes == False and prev_player.counter == C.ORDER_MAX):
+        # if (prev_player.make_changes == False and prev_player.counter == C.ORDER_MAX):
+        if (player.is_done == True):
             return False
         return True
 
@@ -257,7 +290,8 @@ class Confirm(Page):
             return True
 
         prev_player = player.in_round(player.round_number - 1)
-        if (prev_player.make_changes == False and prev_player.counter == C.ORDER_MAX):
+        # if (prev_player.make_changes == False and prev_player.counter == C.ORDER_MAX):
+        if (player.is_done == True):
             return False
         return True
 
@@ -335,7 +369,7 @@ class Confirm(Page):
             participant.savings.append(player.savings)
 
         else:
-
+            # write in data without initializing fields
             order = C.ROUND_ORDER[player.counter]
             participant.monthA.append(C.RETURNA[order] * player.investA)
             participant.monthB.append(max(0, C.RETURNB[order] * (C.ENDOWMENT[order] - player.savings - player.investA)))
@@ -343,44 +377,18 @@ class Confirm(Page):
             participant.probB.append(player.round_probB)
             participant.savings.append(player.savings)
             
-        #stage 2 will now play if it is the last stage 1 round
-        # DELETE THIS SINCE WE WILL WRITE THIS AS A SEPARATE APP
-        if (player.make_changes == False and player.counter == C.ORDER_MAX):
-            subsession.order = 1
 
-        # CHECK IF THIS IS THE LAST ROUND AND THERE WERE NO CHANGES 
-        if player.counter == C.ORDER_MAX and player.make_changes == False:
+class EndOf(Page):
+    @staticmethod
+    def is_displayed(player):
+        if(player.is_done == True):
+            return(True)
+        else:
+            return(False)
 
-            # then define the paying round
-            paying_round = random.randint(0,C.ORDER_MAX)
-            participant.paying_round = paying_round
-
-
-            #draw number between 0 and 1 that will determine paying asset
-            paying_asset_number = random.uniform(0,1) # if less than probA in the paying round then A pays, else B
-            participant.paying_asset_number = paying_asset_number
-
-            participant.paying_round_order = participant.paying_round
-
-
-            # need to call the probability of A that was in the paying round
-            player_in_paying_round = player.in_round(paying_round)
-
-            if participant.paying_asset_number <= player_in_paying_round.round_probA:
-                participant.paying_asset = "A"
-
-            else:
-                participant.paying_asset = "B"
-
-            #set the player's payoffs today and one month from today
-            participant.payoff_today = player_in_paying_round.savings
-
-            if participant.paying_asset == "A":
-                player_in_paying_round.payoff_oneMonth = player_in_paying_round.investA * player_in_paying_round.round_returnA
-            if player.session['paying_asset'] == "B":
-                player_in_paying_round.payoff_oneMonth = max(0, player_in_paying_round.investB * player_in_paying_round.round_returnB)
-
-###
+    @staticmethod
+    def app_after_this_page(player: Player, upcoming_apps):
+        return upcoming_apps[0]
 
 page_sequence = [
     InstructionsStageOne,
@@ -388,5 +396,6 @@ page_sequence = [
     ComprehensionStageOne2,
     SaveToday,
     InvestA,
-    Confirm
+    Confirm,
+    EndOf
 ]
