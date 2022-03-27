@@ -176,6 +176,8 @@ class SaveToday(Page):
         #     player.round_returnA = 0
         #     player.round_returnB = 0
         #     return False
+        if player.is_done == True:
+            return False
         return True
 
     form_model = 'player'
@@ -243,9 +245,6 @@ class SaveToday(Page):
         player.round_returnA = C.RETURNA[player.round_order]
         player.round_probB = C.PROBB[player.round_order]
         player.round_returnB = C.RETURNB[player.round_order]
-
-        if player.counter == C.ORDER_MAX:
-            player.is_done = True
 
 
 class InvestA(Page):
@@ -376,6 +375,9 @@ class Confirm(Page):
             participant.probA.append(player.round_probA)
             participant.probB.append(player.round_probB)
             participant.savings.append(player.savings)
+
+        if player.counter == C.ORDER_MAX and player.make_changes == False:
+            player.is_done = True
             
 
 class EndOf(Page):
