@@ -5,7 +5,18 @@
 {{ block content }}
 
     <p id="text">
- In this question you will be asked to choose between your choices in stage one and a variable amount in the future. The left column will always be to  receive {{ savings_display }} today and {{ monthA_display }} in a month with {{ probA_display }}% probability or {{ monthB_display}} with {{ probB_display }}% probability. For brevity, these will be displayed as "Option A" in the left-hand side. The options on the right are all {{ savings_display }} today and a variable, increasing amount in the future for sure. FINISH EXPLAINING HOW THE OPTIONS WORK.
+Option A is
+
+{{ savings_display }} Today
+
+{{ probA_display }}% of {{monthA_display}} in one month or
+
+{{ probB_display }}% of {{ monthB_display }} in one month.
+
+Remember: Option A (on the left) is the same in every choice, while the option on the right gets better as you move down the screen
+
+Once you have made your selection, click the 'finish' button at the bottom of the screen
+
     </p>
     {{ if C.DISPLAY_VARIABLE_RIGHT }}
         <div id="fixed_option_div" style="width:45%;float:left">

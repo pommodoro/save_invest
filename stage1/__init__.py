@@ -15,7 +15,7 @@ class C(BaseConstants):
 
     #number of unique rounds -1. Setting this to 1 gives two unique rounds.
     #There are 43 total comparisons we want to do, so this should be set to 42.
-    ORDER_MAX = 42 
+    ORDER_MAX = 42
 
     # randomize order of rounds
     # round order is range from 0 to 43 (or number of unique rounds)
@@ -378,6 +378,39 @@ class Confirm(Page):
 
         if player.counter == C.ORDER_MAX and player.make_changes == False:
             player.is_done = True
+
+
+            # select the paying round
+            participant = player.participant
+
+            # select a random UNIQUE round number
+            random_round = random.randint(0, C.ORDER_MAX - 1)
+            participant.paying_round = random_round + 1
+
+            # payoff today
+            participant.payoff_today_s1 = participant.savings[random_round]
+
+            # check if there was no asset B
+            if participant.probA[random_round] == 1:
+
+                # payoff in a month
+                participant.payoff_one_month_s1 = participant.monthA[random_round]
+                participant.paying_asset = "A"
+
+            # if there is an asset B, sample assets with weights
+            else:
+                # sample with weights
+                assets = ["A", "B"]
+                weights = [participant.probA[random_round], participant.probB[random_round]]
+                chosen_asset = random.choices(assets, weights = weights, k = 1)[0]
+
+                participant.paying_asset = chosen_asset
+
+                if chosen_asset == "A":
+                    participant.payoff_one_month_s1 = participant.monthA[random_round]
+
+                if chosen_asset == "B":
+                    participant.payoff_one_month_s1 = participant.monthB[random_round]
             
 
 class EndOf(Page):
@@ -387,6 +420,17 @@ class EndOf(Page):
             return(True)
         else:
             return(False)
+
+    # DEBUG 
+    @staticmethod
+    def vars_for_template(player: Player):
+        participant = player.participant
+        return dict(
+            payoff_today_s1 = participant.payoff_today_s1,
+            paying_round = participant.paying_round,
+            paying_asset = participant.paying_asset,
+            payoff_one_month_s1 = participant.payoff_one_month_s1
+            )
 
     @staticmethod
     def app_after_this_page(player: Player, upcoming_apps):
