@@ -5,7 +5,7 @@ SESSION_CONFIGS = [
         name='save_invest',
         app_sequence=[
         'stage1',
-         'stage2'],
+        'stage2'],
         num_demo_participants=1,
     ),
 ]

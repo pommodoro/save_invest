@@ -17,7 +17,7 @@ class C(BaseConstants):
 
     # round order will not be randomized
 
-    # if the variable below is True, then the variable part of the MPL is displayed on the right, 
+    # if the variable below is True, then the variable part of the MPL is displayed on the right,
     # otherwise it is displayed on the left
     DISPLAY_VARIABLE_RIGHT = True
 
@@ -42,7 +42,8 @@ class C(BaseConstants):
 
 
 class Subsession(BaseSubsession):
-    pass 
+    pass
+
 
 class Group(BaseGroup):
     pass
@@ -51,11 +52,12 @@ class Group(BaseGroup):
 class Player(BasePlayer):
     # the field contains one record per choice that is either f for fixed or v for variable
     # since we cannot store lists in the database we store the information as a string.
-    # If it is needed as a list again (e.g. for payoff calculation) it can be converted 
+    # If it is needed as a list again (e.g. for payoff calculation) it can be converted
     # back into a list by importing the json module and using using json.loads()
     options_chosen = models.StringField()
 
 # PAGES
+
 
 class InstructionsStageTwo(Page):
     def is_displayed(player: Player):
@@ -86,24 +88,24 @@ class MplPage(Page):
         # probability of asset B being picked
         probB = player.participant.probB[player.round_number - 1] * 100
 
-
         # RHS range of future payoffs from $0 to $30 for sure
         variable_range = C.LIST_OF_VARIABLE_OPTIONS.copy()
 
         # RHS text
-        variable_options_text_this_round = C.LIST_OF_VARIABLE_OPTION_TEXTS[player.round_number - 1]
+        variable_options_text_this_round = C.LIST_OF_VARIABLE_OPTION_TEXTS[
+            player.round_number - 1]
 
         # Intialize empty lists
         list_of_fixed_options = []
         list_of_variable_options = []
 
         for i, variable in enumerate(variable_range):
-            id_text_pair_variable = ["v"+str(i), variable_options_text_this_round.format(today=payment_today, one_month=variable)]
+            id_text_pair_variable = [
+                "v"+str(i), variable_options_text_this_round.format(today=payment_today, one_month=variable)]
             id_text_pair_fixed = ["f"+str(i), "Option A"]
             list_of_fixed_options.append(id_text_pair_fixed)
             list_of_variable_options.append(id_text_pair_variable)
         number_of_options = len(list_of_fixed_options)
-
 
         return {
             "number_of_options": number_of_options,
@@ -142,8 +144,14 @@ class Results(Page):
         # get the payoff today
         participant.payoff_today_s2 = participant.savings[paying_round_stage_2 - 1]
 
+        # gets stage 1 results
+        paying_round1 = player.participant.paying_round
+        payoff_today_s1 = player.participant.payoff_today_s1
+        paying_asset_s1 = player.participant.paying_asset
+        payoff_one_month_s1 = player.participant.payoff_one_month_s1
+
         if choice == "f":
-            
+
             # get the payoff in one month
             if participant.probA[paying_round_stage_2 - 1] == 1:
                 participant.payoff_one_moth_s2 = participant.monthA[paying_round_stage_2 - 1]
@@ -151,8 +159,9 @@ class Results(Page):
             else:
                 # sample with weights
                 assets = ["A", "B"]
-                weights = [participant.probA[random_round], participant.probB[paying_round_stage_2 - 1]]
-                chosen_asset = random.choices(assets, weights = weights, k = 1)[0]
+                weights = [participant.probA[random_round],
+                           participant.probB[paying_round_stage_2 - 1]]
+                chosen_asset = random.choices(assets, weights=weights, k=1)[0]
 
                 if chosen_asset == "A":
                     participant.payoff_one_month_s2 = participant.monthA[paying_round_stage_2 - 1]
@@ -161,12 +170,18 @@ class Results(Page):
                     participant.payoff_one_month_s2 = participant.monthB[paying_round_stage_2 - 1]
 
         else:
-            participant.payoff_one_month_s2 = C.LIST_OF_VARIABLE_OPTIONS[paying_row] 
+            participant.payoff_one_month_s2 = C.LIST_OF_VARIABLE_OPTIONS[paying_row]
 
         return dict(
-            payoff_today = participant.payoff_today_s2,
-            payoff_one_month = participant.payoff_one_month_s2)
-
+            payoff_today=participant.payoff_today_s2,
+            payoff_one_month=participant.payoff_one_month_s2,
+            paying_round2_display=paying_round_stage_2,
+            paying_row_display=paying_row,
+            paying_round1_display = paying_round1,
+            payoff_today_s1_display = payoff_today_s1,
+            paying_asset_s1_display = paying_asset_s1,
+            payoff_one_month_s1_display = payoff_one_month_s1
+        )
 
 
 page_sequence = [
