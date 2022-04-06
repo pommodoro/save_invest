@@ -154,14 +154,13 @@ class Results(Page):
 
             # get the payoff in one month
             if participant.probA[paying_round_stage_2 - 1] == 1:
-                participant.payoff_one_moth_s2 = participant.monthA[paying_round_stage_2 - 1]
+                participant.payoff_one_month_s2 = participant.monthA[paying_round_stage_2 - 1]
 
             else:
                 # sample with weights
                 assets = ["A", "B"]
-                weights = [participant.probA[random_round],
-                           participant.probB[paying_round_stage_2 - 1]]
-                chosen_asset = random.choices(assets, weights=weights, k=1)[0]
+                weights = [participant.probA[paying_round], participant.probB[paying_round_stage_2 - 1]]
+                chosen_asset = random.choices(assets, weights = weights, k = 1)[0]
 
                 if chosen_asset == "A":
                     participant.payoff_one_month_s2 = participant.monthA[paying_round_stage_2 - 1]
@@ -173,16 +172,10 @@ class Results(Page):
             participant.payoff_one_month_s2 = C.LIST_OF_VARIABLE_OPTIONS[paying_row]
 
         return dict(
-            payoff_today=participant.payoff_today_s2,
-            payoff_one_month=participant.payoff_one_month_s2,
-            paying_round2_display=paying_round_stage_2,
-            paying_row_display=paying_row,
-            paying_round1_display = paying_round1,
-            payoff_today_s1_display = payoff_today_s1,
-            paying_asset_s1_display = paying_asset_s1,
-            payoff_one_month_s1_display = payoff_one_month_s1
-        )
-
+            payoff_today_s1 = participant.payoff_today_s1,
+            payoff_one_month_s1 = participant.payoff_one_month_s1,
+            payoff_today_s2 = participant.payoff_today_s2,
+            payoff_one_month_s2 = participant.payoff_one_month_s2)
 
 page_sequence = [
     InstructionsStageTwo,
