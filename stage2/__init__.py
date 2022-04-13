@@ -82,16 +82,16 @@ class MplPage(Page):
         # returns from invested amount in B and rate
         monthB = player.participant.s2monthB[player.round_number - 1]
 
-<<<<<<< HEAD
+
         # probability of asset A being picked
         probA = player.participant.s2probA[player.round_number - 1] * 100
 
         # probability of asset B being picked
         probB = player.participant.s2probB[player.round_number - 1] * 100
-=======
+
         # probability of asset A being picked ROUND to whole numbers
         probA = round(player.participant.probA[player.round_number - 1] * 100)
->>>>>>> 7c473ce852364b9c66a79a676837925342220c58
+
 
         # probability of asset B being picked ROUND to whole numbers
         probB = round(player.participant.probB[player.round_number - 1] * 100)
