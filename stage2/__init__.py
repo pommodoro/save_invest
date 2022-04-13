@@ -72,19 +72,19 @@ class MplPage(Page):
     @staticmethod
     def vars_for_template(player: Player):
         # savings selected in the round number
-        payment_today = player.participant.savings[player.round_number - 1]
+        payment_today = player.participant.s2savings[player.round_number - 1]
 
         # returns from invested amount in A and rate
-        monthA = player.participant.monthA[player.round_number - 1]
+        monthA = player.participant.s2monthA[player.round_number - 1]
 
         # returns from invested amount in B and rate
-        monthB = player.participant.monthB[player.round_number - 1]
+        monthB = player.participant.s2monthB[player.round_number - 1]
 
         # probability of asset A being picked
-        probA = player.participant.probA[player.round_number - 1] * 100
+        probA = player.participant.s2probA[player.round_number - 1] * 100
 
         # probability of asset B being picked
-        probB = player.participant.probB[player.round_number - 1] * 100
+        probB = player.participant.s2probB[player.round_number - 1] * 100
 
 
         # RHS range of future payoffs from $0 to $30 for sure
@@ -140,25 +140,25 @@ class Results(Page):
         choice = paying_player.options_chosen[paying_row]
 
         # get the payoff today
-        participant.payoff_today_s2 = participant.savings[paying_round_stage_2 - 1]
+        participant.payoff_today_s2 = participant.s2savings[paying_round_stage_2 - 1]
 
         if choice == "f":
             
             # get the payoff in one month
-            if participant.probA[paying_round_stage_2 - 1] == 1:
-                participant.payoff_one_month_s2 = participant.monthA[paying_round_stage_2 - 1]
+            if participant.s2probA[paying_round_stage_2 - 1] == 1:
+                participant.payoff_one_month_s2 = participant.s2monthA[paying_round_stage_2 - 1]
 
             else:
                 # sample with weights
                 assets = ["A", "B"]
-                weights = [participant.probA[paying_round], participant.probB[paying_round_stage_2 - 1]]
+                weights = [participant.s2probA[paying_round], participant.s2probB[paying_round_stage_2 - 1]]
                 chosen_asset = random.choices(assets, weights = weights, k = 1)[0]
 
                 if chosen_asset == "A":
-                    participant.payoff_one_month_s2 = participant.monthA[paying_round_stage_2 - 1]
+                    participant.payoff_one_month_s2 = participant.s2monthA[paying_round_stage_2 - 1]
 
                 if chosen_asset == "B":
-                    participant.payoff_one_month_s2 = participant.monthB[paying_round_stage_2 - 1]
+                    participant.payoff_one_month_s2 = participant.s2monthB[paying_round_stage_2 - 1]
 
         else:
             participant.payoff_one_month_s2 = C.LIST_OF_VARIABLE_OPTIONS[paying_row] 
