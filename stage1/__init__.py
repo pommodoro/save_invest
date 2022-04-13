@@ -13,6 +13,7 @@ class C(BaseConstants):
     PLAYERS_PER_GROUP = None
 
     NUM_ROUNDS = 126
+    #126
 
     #number of unique rounds -1. Setting this to 1 gives two unique rounds.
     #There are 43 total comparisons we want to do, so this should be set to 42.

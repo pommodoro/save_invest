@@ -5,15 +5,15 @@
 {{ block content }}
 
     <p id="text">
-Option A is
+Option A is <br/><br />
 
-{{ savings_display }} Today
+{{ savings_display }} today, <br/><br />
 
-{{ probA_display }}% of {{monthA_display}} in one month or
+{{ probA_display }}% of {{monthA_display}} in one month <br /> or <br/>
 
-{{ probB_display }}% of {{ monthB_display }} in one month.
+{{ probB_display }}% of {{ monthB_display }} in one month. <br/><br />
 
-Remember: Option A (on the left) is the same in every choice, while the option on the right gets better as you move down the screen
+Remember: Option A (on the left) is the same in every choice, while the option on the right gets better as you move down the screen<br/><br />
 
 Once you have made your selection, click the 'finish' button at the bottom of the screen
 
@@ -45,6 +45,8 @@ Once you have made your selection, click the 'finish' button at the bottom of th
             {{ endfor }}
         </div>
     {{ endif }}
+    <br /><br />
+    
     <button type="button" onClick="submit_page()" class="otree-btn-next btn btn-primary">Next</button>
     <input type="hidden" id="options_chosen_input" name="options_chosen">
 

@@ -3,23 +3,24 @@
 {{ endblock }}
 {{ block content }}
     In part two of the experiment you will be presented with 32 different choice screens. On each of these screens you will be presented with a list of choices for you to make. The first option will be the same in each choice: it will be an amount of money that you will receive today, plus the chance of receiving some money in one month's time. The second option will change in each choice. It will be a fixed amount of money today, plus a certain amount of money in one month's time. As you go down the list of choices, the second option will get better, because the amount you receive in one month's time will increase.
-
+    <br/><br/>
     Here is an example of the type of choices you will be asked to make:
-    # Include screenshot of example with description
-
-    Because the first option remains the same and the second option gets better as you go down the list, it makes sense that your choices will "switch" at some point from the first to the second option. Here is an example,
-
-   # Include a shortened example screenshot with choices filled in and explain that if you liked the second option more on a certain line, then you should like the second option more on all subsequent lines.
-
+    <br/><br/>
+    <img src="https://i.imgur.com/ZW93kzM.png" width="800px" />
+    <br/><br/>
+    In this example, Option A lets you receive $3 today, 60% of receiving $6.8 and 40% of receiving $7.5 in one month. The user selected they would choose Option A until they are guaranteed $3 today and $10 in one month. 
+    <br/><br/>
+    Because the first option remains the same and the second option gets better as you go down the list, it makes sense that your choices will "switch" at some point from the first to the second option. 
+    <br/><br/>
    In order to help you fill in your choices on each screen, the program is designed so that you only need to click on one line. If you click on the first option on that line, the program will automatically select the first option for that line and all those above, and the second option on all lines below. If you select the second option on that line, it will select the second option on that line and all the lines below, and the first option on all the lines above.
-
-   # Include explanation linked to the choice screen above "so, in order to select choices like the one above, you could either select xx over y on line z, or w over v on line u"
-
+   <br/><br/>
+    So, in order to select choices like the one above, you could either select Option A over $3 today and $9.5 for sure, or $3 today and $10 over Option A on the line below it. 
+   <br/><br/>
     Once you have clicked on a particular option, you can always change your choice by clicking on a different option on a different line.
-    
+    <br/><br/>
     Once you are happy with your choices on a screen you can move onto the next screen by clicking the 'finish' button at the bottom of the screen
-
+    <br/><br/>
     One question screen will be selected at random from this part of the experiment, and one line selected at random from that screen. You will receive whichever option you chose on that line, so you should think about all your choices carefully.
-    
+    <br/><br/>
     {{ next_button }}
 {{ endblock }}
