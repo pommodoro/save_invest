@@ -1,6 +1,7 @@
 from otree.api import *
 import json
 import random
+import numpy as np
 
 doc = """
 Stage 1 of save invest experiment
@@ -453,6 +454,24 @@ class EndOf(Page):
             paying_asset=participant.paying_asset,
             payoff_one_month_s1=participant.payoff_one_month_s1
         )
+
+    # create participant variables to be used in stage 2
+    @staticmethod
+    def before_next_page(player, timeout_happened):
+        participant = player.participant
+
+        # get the index numbers where the probability of getting asset A is not 1
+        # and converting to a list
+        idx_np1 = np.where(np.array(participant.probA) != 1)[0].tolist()
+
+        # subsetting values only for when probA 
+        participant.s2savings = np.array(participant.savings)[idx_np1].tolist()
+        participant.s2probA = np.array(participant.probA)[idx_np1].tolist()
+        participant.s2probB = np.array(participant.probB)[idx_np1].tolist()
+        participant.s2monthA = np.array(participant.monthA)[idx_np1].tolist()
+        participant.s2monthB = np.array(participant.monthB)[idx_np1].tolist()
+
+
 
     @staticmethod
     def app_after_this_page(player: Player, upcoming_apps):
