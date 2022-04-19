@@ -4,8 +4,8 @@ SESSION_CONFIGS = [
     dict(
         name='save_invest',
         app_sequence=[
-        'stage2',
-        'stage1'],
+        'stage1',
+        'stage2'],
         num_demo_participants=1,
     ),
 ]
