@@ -13,10 +13,10 @@ class C(BaseConstants):
     PLAYERS_PER_GROUP = None
 
     NUM_ROUNDS = 126
-    #126
+    # 126
 
-    #number of unique rounds -1. Setting this to 1 gives two unique rounds.
-    #There are 43 total comparisons we want to do, so this should be set to 42.
+    # number of unique rounds -1. Setting this to 1 gives two unique rounds.
+    # There are 43 total comparisons we want to do, so this should be set to 42.
     ORDER_MAX = 42
 
     # randomize order of rounds
@@ -33,31 +33,32 @@ class C(BaseConstants):
 
     # populating probability A
     PROBA = [1, 0.1,  0.55, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 0.95, 0.8, 0.3, 0.6, 0.5, 0.95,
-    0.2, 0.7, 0.4, 0.5, 0.05, 0.8, 0.3, 0.6, 0.5, 0.95,
-    0.2, 0.7, 0.4, 0.5, 0.05, 0.8, 0.3, 0.6, 0.5, 0.95, 
-    0.2, 0.7, 0.4, 0.5]
+             1, 1, 1, 1, 0.95, 0.8, 0.3, 0.6, 0.5, 0.95,
+             0.2, 0.7, 0.4, 0.5, 0.05, 0.8, 0.3, 0.6, 0.5, 0.95,
+             0.2, 0.7, 0.4, 0.5, 0.05, 0.8, 0.3, 0.6, 0.5, 0.95,
+             0.2, 0.7, 0.4, 0.5]
 
     # populating probability B
     PROBB = [round(1 - p, 2) for p in PROBA]
 
     # populating return to A
-    RETURNA = [2.1, 1.9, 2.7, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 
-    1.6, 1.7, 1.8, 1.9, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7,
-    1.7, 1.7, 1.7, 1.7, 2.4, 2.4, 2.4, 2.4, 2.4, 2.4,
-    2.4, 2.4, 2.4, 2.4, 2.2, 2.2, 2.2, 2.2, 2.2, 2.2,
-    2.2, 2.2, 2.2, 2.2]
+    RETURNA = [2.1, 1.9, 2.7, 1, 1.1, 1.2, 1.3, 1.4, 1.5,
+               1.6, 1.7, 1.8, 1.9, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7,
+               1.7, 1.7, 1.7, 1.7, 2.4, 2.4, 2.4, 2.4, 2.4, 2.4,
+               2.4, 2.4, 2.4, 2.4, 2.2, 2.2, 2.2, 2.2, 2.2, 2.2,
+               2.2, 2.2, 2.2, 2.2]
 
     # populating return to B
     RETURNB = [-1, 2.3, 1.6, -1, -1, -1, -1, -1, -1,
-    -1, -1, -1, -1, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5,
-    2.5, 2.5, 2.5, 2.5, 2.5, 1.8, 1.8, 1.8, 1.8, 1.8,
-    1.8, 1.8, 1.8, 1.8, 2, 2, 2, 2, 2, 2, 2,
-    2, 2, 2]
+               -1, -1, -1, -1, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5,
+               2.5, 2.5, 2.5, 2.5, 2.5, 1.8, 1.8, 1.8, 1.8, 1.8,
+               1.8, 1.8, 1.8, 1.8, 2, 2, 2, 2, 2, 2, 2,
+               2, 2, 2]
 
 
 class Subsession(BaseSubsession):
-    pass 
+    pass
+
 
 class Group(BaseGroup):
     pass
@@ -72,7 +73,7 @@ class Player(BasePlayer):
     comp_prob1 = models.FloatField()
     comp_prob2 = models.FloatField()
 
-    #Round Parameters
+    # Round Parameters
     counter = models.IntegerField()
     round_order = models.IntegerField()
     round_endowment = models.CurrencyField()
@@ -81,8 +82,8 @@ class Player(BasePlayer):
     round_returnA = models.FloatField()
     round_returnB = models.FloatField()
 
-    #Round Choices
-    savings = models.CurrencyField(min = 0, max = 10)
+    # Round Choices
+    savings = models.CurrencyField(min=0, max=10)
     investA = models.CurrencyField()
     investB = models.CurrencyField()
 
@@ -95,32 +96,43 @@ class Player(BasePlayer):
     # set max value for input in investA
     def investA_max(player):
         return player.round_endowment - player.savings
-        
-    #Payoffs
+
+    # Payoffs
     paying_asset = models.StringField()
     payoff_today = models.CurrencyField()
     payoff_oneMonth = models.CurrencyField()
     make_changes = models.BooleanField()
-    
-    #Final counter round indicator
-    is_done = models.BooleanField(initial = False)
 
-#Error Messages for incorrect user inputs
+    # Final counter round indicator
+    is_done = models.BooleanField(initial=False)
+
+# Error Messages for incorrect user inputs
+
+
 def comp_instant_error_message(player, value):
-   if value != 10:
-       return 'Incorrect. Try Again.'
+    if value != 10:
+        return 'Incorrect. Try Again.'
+
+
 def comp_oneMonthA_error_message(player, value):
-     if value != 11:
-         return 'Incorrect. Try Again.'
+    if value != 11:
+        return 'Incorrect. Try Again.'
+
+
 def comp_oneMonthB_error_message(player, value):
-     if value != 5:
-         return 'Incorrect. Try Again.'
+    if value != 5:
+        return 'Incorrect. Try Again.'
+
+
 def comp_prob1_error_message(player, value):
-     if value != 60:
-         return 'Incorrect. Try Again.'
+    if value != 60:
+        return 'Incorrect. Try Again.'
+
+
 def comp_prob2_error_message(player, value):
-     if value != 40:
-         return 'Incorrect. Try Again.'
+    if value != 40:
+        return 'Incorrect. Try Again.'
+
 
 def investA_error_message(player, value):
     if value > (player.round_endowment - player.savings):
@@ -129,6 +141,8 @@ def investA_error_message(player, value):
         return 'Investment must be zero or greater'
 
 # PAGES
+
+
 class InstructionsStageOne(Page):
     def is_displayed(player):
         return player.round_number == 1
@@ -142,13 +156,13 @@ class InstructionsStageOne(Page):
         participant.round_order = C.ROUND_ORDER.copy()
 
 
-
 class ComprehensionStageOne1(Page):
     def is_displayed(player):
         return player.round_number == 1
 
     form_model = 'player'
-    form_fields = ['comp_instant', 'comp_oneMonthA','comp_oneMonthB']
+    form_fields = ['comp_instant', 'comp_oneMonthA', 'comp_oneMonthB']
+
 
 class ComprehensionStageOne2(Page):
     def is_displayed(player):
@@ -156,6 +170,12 @@ class ComprehensionStageOne2(Page):
 
     form_model = 'player'
     form_fields = ['comp_prob1', 'comp_prob2']
+
+
+class ComprehensionComplete(Page):
+    def is_displayed(player):
+        return player.round_number == 1
+
 
 class SaveToday(Page):
     def is_displayed(player: Player):
@@ -166,7 +186,7 @@ class SaveToday(Page):
 
         # prev_player = player.in_round(player.round_number - 1)
 
-        # # what is this if condition supposed to do? it checks that the previous counter was 
+        # # what is this if condition supposed to do? it checks that the previous counter was
         # # at order max but why do we care?
         # if (prev_player.make_changes == False and prev_player.counter == C.ORDER_MAX):
         #     player.make_changes = False
@@ -187,7 +207,7 @@ class SaveToday(Page):
 
     @staticmethod
     def vars_for_template(player: Player):
-        #set the counter
+        # set the counter
         # if first round intialize at 0
         if (player.round_number == 1):
             player.counter = 0
@@ -195,20 +215,19 @@ class SaveToday(Page):
         # for other rounds do
         if (player.round_number > 1):
 
-            #define the previous player
+            # define the previous player
             prev_player = player.in_round(player.round_number-1)
 
-            #if player is altering preferences, counter set to previous round counter
+            # if player is altering preferences, counter set to previous round counter
             if (prev_player.make_changes == True):
                 player.counter = prev_player.counter
 
-            #if new round, counter set to previous round counter +1
+            # if new round, counter set to previous round counter +1
             else:
                 player.counter = prev_player.counter + 1
-        #if first round, counter set to 0
+        # if first round, counter set to 0
         else:
             player.counter = 0
-
 
         # test to see if this is the last round
         # important because player.counter could be out of round_order range
@@ -219,7 +238,6 @@ class SaveToday(Page):
         returnA = C.RETURNA[order]
         probB = C.PROBB[order]
         returnB = C.RETURNB[order]
-
 
         # order = C.ROUND_ORDER[player.counter] if (player.counter <C.ORDER_MAX) else 0
         # endowment = C.ENDOWMENT[order]
@@ -234,13 +252,13 @@ class SaveToday(Page):
             probA_display=probA,
             returnA_display=returnA,
             probB_display=probB,
-            returnB_display=returnB if returnB>0 else "N/A",
+            returnB_display=returnB if returnB > 0 else "N/A",
             roundNo_display=player.counter+1
         )
 
     @staticmethod
     def before_next_page(player, timeout_happened):
-        #writing to memory after clicking submit
+        # writing to memory after clicking submit
         player.round_order = C.ROUND_ORDER[player.counter]
         player.round_endowment = C.ENDOWMENT[player.round_order]
         player.round_probA = C.PROBA[player.round_order]
@@ -280,10 +298,11 @@ class InvestA(Page):
             probA_display=probA,
             returnA_display=returnA,
             probB_display=probB,
-            returnB_display=returnB if returnB>0 else "N/A",
+            returnB_display=returnB if returnB > 0 else "N/A",
             max_investA_display=max_investA,
             roundNo_display=player.counter+1
         )
+
 
 class Confirm(Page):
     def is_displayed(player):
@@ -301,7 +320,7 @@ class Confirm(Page):
 
     @staticmethod
     def vars_for_template(player):
-        #writes choices for use in pages
+        # writes choices for use in pages
         order = C.ROUND_ORDER[player.counter]
         endowment = C.ENDOWMENT[order]
         probA = C.PROBA[order]
@@ -313,28 +332,29 @@ class Confirm(Page):
         money_today = player.savings
         money_onemonthA = C.RETURNA[order] * player.investA
         money_onemonthB = max(0, C.RETURNB[order] * (
-                        C.ENDOWMENT[order] - player.savings - player.investA))
+            C.ENDOWMENT[order] - player.savings - player.investA))
 
         return dict(
             endowment_display=endowment,
             probA_display=probA,
             returnA_display=returnA,
             probB_display=probB,
-            returnB_display=returnB if returnB>0 else "N/A",
+            returnB_display=returnB if returnB > 0 else "N/A",
             max_investA_display=max_investA,
             investB_display=investB,
             money_today_display=money_today,
             money_onemonthA_display=money_onemonthA,
             money_onemonthB_display=money_onemonthB,
-            roundNo_display = player.counter+1
+            roundNo_display=player.counter+1
         )
 
-    #for the barchart
+    # for the barchart
     def js_vars(player):
         order = C.ROUND_ORDER[player.counter]
         money_today = player.savings
         money_onemonthA = C.RETURNA[order] * player.investA
-        money_onemonthB = max(0,C.RETURNB[order] * (C.ENDOWMENT[order] - player.savings - player.investA))
+        money_onemonthB = max(
+            0, C.RETURNB[order] * (C.ENDOWMENT[order] - player.savings - player.investA))
         chart_series = [money_today, money_onemonthA, money_onemonthB]
 
         return dict(
@@ -343,7 +363,6 @@ class Confirm(Page):
             money_onemonthB_chart=money_onemonthB,
             chart_series=chart_series
         )
-
 
     @staticmethod
     def before_next_page(player, timeout_happened):
@@ -364,7 +383,8 @@ class Confirm(Page):
             # write in data to participant list
             order = C.ROUND_ORDER[player.counter]
             participant.monthA.append(C.RETURNA[order] * player.investA)
-            participant.monthB.append(max(0, C.RETURNB[order] * (C.ENDOWMENT[order] - player.savings - player.investA)))
+            participant.monthB.append(
+                max(0, C.RETURNB[order] * (C.ENDOWMENT[order] - player.savings - player.investA)))
             participant.probA.append(player.round_probA)
             participant.probB.append(player.round_probB)
             participant.savings.append(player.savings)
@@ -373,14 +393,14 @@ class Confirm(Page):
             # write in data without initializing fields
             order = C.ROUND_ORDER[player.counter]
             participant.monthA.append(C.RETURNA[order] * player.investA)
-            participant.monthB.append(max(0, C.RETURNB[order] * (C.ENDOWMENT[order] - player.savings - player.investA)))
+            participant.monthB.append(
+                max(0, C.RETURNB[order] * (C.ENDOWMENT[order] - player.savings - player.investA)))
             participant.probA.append(player.round_probA)
             participant.probB.append(player.round_probB)
             participant.savings.append(player.savings)
 
         if player.counter == C.ORDER_MAX and player.make_changes == False:
             player.is_done = True
-
 
             # select the paying round
             participant = player.participant
@@ -403,8 +423,9 @@ class Confirm(Page):
             else:
                 # sample with weights
                 assets = ["A", "B"]
-                weights = [participant.probA[random_round], participant.probB[random_round]]
-                chosen_asset = random.choices(assets, weights = weights, k = 1)[0]
+                weights = [participant.probA[random_round],
+                           participant.probB[random_round]]
+                chosen_asset = random.choices(assets, weights=weights, k=1)[0]
 
                 participant.paying_asset = chosen_asset
 
@@ -413,7 +434,7 @@ class Confirm(Page):
 
                 if chosen_asset == "B":
                     participant.payoff_one_month_s1 = participant.monthB[random_round]
-            
+
 
 class EndOf(Page):
     @staticmethod
@@ -423,16 +444,16 @@ class EndOf(Page):
         else:
             return(False)
 
-    # DEBUG 
+    # DEBUG
     @staticmethod
     def vars_for_template(player: Player):
         participant = player.participant
         return dict(
-            payoff_today_s1 = participant.payoff_today_s1,
-            paying_round = participant.paying_round,
-            paying_asset = participant.paying_asset,
-            payoff_one_month_s1 = participant.payoff_one_month_s1
-            )
+            payoff_today_s1=participant.payoff_today_s1,
+            paying_round=participant.paying_round,
+            paying_asset=participant.paying_asset,
+            payoff_one_month_s1=participant.payoff_one_month_s1
+        )
 
     # create participant variables to be used in stage 2
     @staticmethod
@@ -456,10 +477,12 @@ class EndOf(Page):
     def app_after_this_page(player: Player, upcoming_apps):
         return upcoming_apps[0]
 
+
 page_sequence = [
     InstructionsStageOne,
     ComprehensionStageOne1,
     ComprehensionStageOne2,
+    ComprehensionComplete,
     SaveToday,
     InvestA,
     Confirm,

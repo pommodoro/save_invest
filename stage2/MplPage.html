@@ -1,17 +1,15 @@
 {{ block title }}
-    Please make a choice
+    Please Make a Choice
 {{ endblock }}
 
 {{ block content }}
 
     <p id="text">
-Option A is <br/><br />
+Option A: <br/><br />
 
-{{ savings_display }} today, <br/><br />
+Today: 100% chance of {{ savings_display }} <br/><br />
 
-{{ probA_display }}% of {{monthA_display}} in one month <br /> or <br/>
-
-{{ probB_display }}% of {{ monthB_display }} in one month. <br/><br />
+One month's time: {{ probA_display }}% chance of {{monthA_display}}, {{ probB_display }}% chance of {{ monthB_display }} <br/><br />
 
 Remember: Option A (on the left) is the same in every choice, while the option on the right gets better as you move down the screen<br/><br />
 
