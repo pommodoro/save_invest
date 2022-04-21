@@ -160,7 +160,7 @@ class Results(Page):
             else:
                 # sample with weights
                 assets = ["A", "B"]
-                weights = [participant.s2probA[paying_round], participant.s2probB[paying_round_stage_2 - 1]]
+                weights = [participant.s2probA[paying_round_stage_2], participant.s2probB[paying_round_stage_2 - 1]]
                 chosen_asset = random.choices(assets, weights = weights, k = 1)[0]
 
                 if chosen_asset == "A":
