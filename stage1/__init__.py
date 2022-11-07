@@ -17,19 +17,19 @@ class C(BaseConstants):
 
     # number of unique rounds -1. Setting this to 1 gives two unique rounds.
     # There are 43 total comparisons we want to do, so this should be set to 42.
-    ORDER_MAX = 42
+    ORDER_MAX = 41
 
     # randomize order of rounds
     # round order is range from 0 to 43 (or number of unique rounds)
     # recall this will be a list of length 43 because it starts at zero and does not include the upper endpoint.
-    ROUND_ORDER = list(range(0, 43, 1))
+    ROUND_ORDER = list(range(0, 42, 1))
 
     # print("Original: ", ROUND_ORDER)
     random.shuffle(ROUND_ORDER)
     # print("1 shuffle: ", ROUND_ORDER)
 
     # repeating the fixed ENDOWMENT (10) the total number of unique comparisons + 1 since we are never in round 0
-    ENDOWMENT = [10] * 43
+    ENDOWMENT = [10] * 42
 
     # populating probability A
 
