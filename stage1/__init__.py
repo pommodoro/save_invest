@@ -167,7 +167,8 @@ class InstructionsStageOne(Page):
         participant = player.participant
 
         # write the order to data
-        participant.round_order = C.ROUND_ORDER.copy()
+        round_order = C.ROUND_ORDER.copy()
+        participant.round_order = random.sample(round_order, len(round_order))
 
 
 class ComprehensionStageOne1(Page):
@@ -188,9 +189,6 @@ class ComprehensionStageOne2(Page):
 
 class ComprehensionComplete(Page):
     def is_displayed(player):
-        # insert here round order RANDOMIZER
-        participant.round_order = random.shuffle(ROUND_ORDER) 
-
         return player.round_number == 1
 
 
@@ -230,6 +228,7 @@ class SaveToday(Page):
         # test to see if this is the last round
         # important because player.counter could be out of round_order range
         # if (player.counter < C.ORDER_MAX):
+        participant = player.participant
         order = participant.round_order[player.counter]
         endowment = C.ENDOWMENT[order]
         probA = C.PROBA[order]
@@ -257,6 +256,7 @@ class SaveToday(Page):
     @staticmethod
     def before_next_page(player, timeout_happened):
         # writing to memory after clicking submit
+        participant = player.participant
         player.round_order = participant.round_order[player.counter]
         player.round_endowment = C.ENDOWMENT[player.round_order]
         player.round_probA = C.PROBA[player.round_order]
@@ -283,7 +283,7 @@ class InvestA(Page):
 
     @staticmethod
     def vars_for_template(player):
-        order = participant.round_order[player.counter]
+        order = player.participant.round_order[player.counter]
         endowment = C.ENDOWMENT[order]
         probA = C.PROBA[order]
         returnA = C.RETURNA[order]
@@ -319,7 +319,7 @@ class Confirm(Page):
     @staticmethod
     def vars_for_template(player):
         # writes choices for use in pages
-        order = participant.round_order[player.counter]
+        order = player.participant.round_order[player.counter]
         endowment = C.ENDOWMENT[order]
         probA = C.PROBA[order]
         returnA = C.RETURNA[order]
@@ -348,7 +348,7 @@ class Confirm(Page):
 
     # for the barchart
     def js_vars(player):
-        order = participant.round_order[player.counter]
+        order = player.participant.round_order[player.counter]
         money_today = player.savings
         money_onemonthA = C.RETURNA[order] * player.investA
         money_onemonthB = max(
@@ -379,7 +379,7 @@ class Confirm(Page):
             participant.savings = []
 
             # write in data to participant list
-            order = participant.round_order[player.counter]
+            order = player.participant.round_order[player.counter]
             participant.monthA.append(C.RETURNA[order] * player.investA)
             participant.monthB.append(
                 max(0, C.RETURNB[order] * (C.ENDOWMENT[order] - player.savings - player.investA)))
