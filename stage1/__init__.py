@@ -16,16 +16,17 @@ class C(BaseConstants):
     # 126
 
     # number of unique rounds -1. Setting this to 1 gives two unique rounds.
-    # There are 43 total comparisons we want to do, so this should be set to 42.
+    # There are 42 total comparisons, so this should be set to 41.
     ORDER_MAX = 41
 
+    # ORDER RANDOMIZATION SHOULD NOT BE DONE IN THE BASE CONSTANTS
     # randomize order of rounds
-    # round order is range from 0 to 43 (or number of unique rounds)
-    # recall this will be a list of length 43 because it starts at zero and does not include the upper endpoint.
+    # round order is range from 0 to 42 (or number of unique rounds)
+    # recall this will be a list of length 42 because it starts at zero and does not include the upper endpoint.
     ROUND_ORDER = list(range(0, 42, 1))
 
     # print("Original: ", ROUND_ORDER)
-    random.shuffle(ROUND_ORDER)
+    # random.shuffle(ROUND_ORDER)
     # print("1 shuffle: ", ROUND_ORDER)
 
     # repeating the fixed ENDOWMENT (10) the total number of unique comparisons + 1 since we are never in round 0
@@ -187,30 +188,14 @@ class ComprehensionStageOne2(Page):
 
 class ComprehensionComplete(Page):
     def is_displayed(player):
+        # insert here round order RANDOMIZER
+        participant.round_order = random.shuffle(ROUND_ORDER) 
+
         return player.round_number == 1
 
 
 class SaveToday(Page):
     def is_displayed(player: Player):
-        # I THINK NONE OF THIS IS NECESSARY
-        # if (player.round_number == 1):
-        #     player.participant.order = 0
-        #     return True
-
-        # prev_player = player.in_round(player.round_number - 1)
-
-        # # what is this if condition supposed to do? it checks that the previous counter was
-        # # at order max but why do we care?
-        # if (prev_player.make_changes == False and prev_player.counter == C.ORDER_MAX):
-        #     player.make_changes = False
-        #     player.counter = C.ORDER_MAX
-        #     player.round_order = 0
-        #     player.round_endowment = 0
-        #     player.round_probA = 0
-        #     player.round_probB = 0
-        #     player.round_returnA = 0
-        #     player.round_returnB = 0
-        #     return False
         if player.is_done == True:
             return False
         return True
@@ -245,7 +230,7 @@ class SaveToday(Page):
         # test to see if this is the last round
         # important because player.counter could be out of round_order range
         # if (player.counter < C.ORDER_MAX):
-        order = C.ROUND_ORDER[player.counter]
+        order = participant.round_order[player.counter]
         endowment = C.ENDOWMENT[order]
         probA = C.PROBA[order]
         returnA = C.RETURNA[order]
@@ -272,7 +257,7 @@ class SaveToday(Page):
     @staticmethod
     def before_next_page(player, timeout_happened):
         # writing to memory after clicking submit
-        player.round_order = C.ROUND_ORDER[player.counter]
+        player.round_order = participant.round_order[player.counter]
         player.round_endowment = C.ENDOWMENT[player.round_order]
         player.round_probA = C.PROBA[player.round_order]
         player.round_returnA = C.RETURNA[player.round_order]
@@ -298,7 +283,7 @@ class InvestA(Page):
 
     @staticmethod
     def vars_for_template(player):
-        order = C.ROUND_ORDER[player.counter]
+        order = participant.round_order[player.counter]
         endowment = C.ENDOWMENT[order]
         probA = C.PROBA[order]
         returnA = C.RETURNA[order]
@@ -334,7 +319,7 @@ class Confirm(Page):
     @staticmethod
     def vars_for_template(player):
         # writes choices for use in pages
-        order = C.ROUND_ORDER[player.counter]
+        order = participant.round_order[player.counter]
         endowment = C.ENDOWMENT[order]
         probA = C.PROBA[order]
         returnA = C.RETURNA[order]
@@ -363,7 +348,7 @@ class Confirm(Page):
 
     # for the barchart
     def js_vars(player):
-        order = C.ROUND_ORDER[player.counter]
+        order = participant.round_order[player.counter]
         money_today = player.savings
         money_onemonthA = C.RETURNA[order] * player.investA
         money_onemonthB = max(
@@ -394,7 +379,7 @@ class Confirm(Page):
             participant.savings = []
 
             # write in data to participant list
-            order = C.ROUND_ORDER[player.counter]
+            order = participant.round_order[player.counter]
             participant.monthA.append(C.RETURNA[order] * player.investA)
             participant.monthB.append(
                 max(0, C.RETURNB[order] * (C.ENDOWMENT[order] - player.savings - player.investA)))
