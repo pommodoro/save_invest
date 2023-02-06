@@ -103,7 +103,7 @@ class MplPage(Page):
         for i, variable in enumerate(variable_range):
             id_text_pair_variable = [
                 "v"+str(i), variable_options_text_this_round.format(today=payment_today, one_month=variable)]
-            id_text_pair_fixed = ["f"+str(i), str(payment_today)+"today and Lottery A "]
+            id_text_pair_fixed = ["f"+str(i), "Today: "+str(payment_today)+", One Month: Lottery A "]
             list_of_fixed_options.append(id_text_pair_fixed)
             list_of_variable_options.append(id_text_pair_variable)
         number_of_options = len(list_of_fixed_options)
