@@ -63,6 +63,18 @@ class InstructionsStageTwo(Page):
     def is_displayed(player: Player):
         return player.round_number == 1
 
+    # Determining the paying round and row for stage 2. Done here so that refreshing the final page does not change results.
+    @staticmethod
+    def before_next_page(player, timeout_happened):
+        # define participant in name space
+        participant = player.participant
+
+        # determine the paying round in stage 2
+        paying_round_stage_2 = random.randint(1, 32)
+
+        # determine the paying ROW in the round, there a 62 rows but we
+        # want to sample from 0 to 61 for indexing
+        paying_row = random.randint(0, 61)
 
 class MplPage(Page):
     def is_displayed(player: Player):
@@ -128,13 +140,6 @@ class Results(Page):
     @staticmethod
     def vars_for_template(player: Player):
         participant = player.participant
-
-        # determine the paying round in stage 2
-        paying_round_stage_2 = random.randint(1, 32)
-
-        # determine the paying ROW in the round, there a 62 rows but we
-        # want to sample from 0 to 61 for indexing
-        paying_row = random.randint(0, 61)
 
         # get the player for the paying round
         paying_player = player.in_round(paying_round_stage_2)
