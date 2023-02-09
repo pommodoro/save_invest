@@ -308,7 +308,7 @@ class Confirm(Page):
             return True
 
         prev_player = player.in_round(player.round_number - 1)
-        # if (prev_player.make_changes == False and prev_player.counter == C.ORDER_MAX):
+        
         if (player.is_done == True):
             return False
         return True
@@ -367,10 +367,7 @@ class Confirm(Page):
         # point to the participant attribute
         participant = player.participant
 
-        # write investB to data
-        player.investB = player.round_endowment - player.savings - player.investA
-
-        if player.round_number == 1:
+        if player.round_number == 1 :
             # initialize participant lists if first round
             participant.monthA = []
             participant.monthB = []
@@ -378,18 +375,11 @@ class Confirm(Page):
             participant.probB = []
             participant.savings = []
 
-            # write in data to participant list
-            order = player.participant.round_order[player.counter]
-            participant.monthA.append(C.RETURNA[order] * player.investA)
-            participant.monthB.append(
-                max(0, C.RETURNB[order] * (C.ENDOWMENT[order] - player.savings - player.investA)))
-            participant.probA.append(player.round_probA)
-            participant.probB.append(player.round_probB)
-            participant.savings.append(player.savings)
+        if player.make_changes == False:
+            # write investB to data
+            player.investB = player.round_endowment - player.savings - player.investA
 
-        else:
-            # write in data without initializing fields
-            order = C.ROUND_ORDER[player.counter]
+            order = player.participant.round_order[player.counter]
             participant.monthA.append(C.RETURNA[order] * player.investA)
             participant.monthB.append(
                 max(0, C.RETURNB[order] * (C.ENDOWMENT[order] - player.savings - player.investA)))
