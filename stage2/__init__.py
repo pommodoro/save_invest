@@ -21,13 +21,6 @@ class C(BaseConstants):
     # otherwise it is displayed on the left
     DISPLAY_VARIABLE_RIGHT = True
 
-    # # Initialize the format of the fixed option
-    # list_of_fixed_options = [
-    #     "Option A",
-    # ]
-
-    # list_of_fixed_options = list_of_fixed_options*32
-
     # The list below should contain 1 entry per round
     # It should contain the text of the variable part for a given round
     # {placeholder} will be replace with the items of the array
@@ -72,9 +65,25 @@ class InstructionsStageTwo(Page):
         # determine the paying round in stage 2
         participant.paying_round_stage_2 = random.randint(1, 32)
 
+        paying_round_stage_2 = participant.paying_round_stage_2
+
         # determine the paying ROW in the round, there a 62 rows but we
         # want to sample from 0 to 61 for indexing
         participant.paying_row = random.randint(0, 61)
+
+        # every choice in stage 2 had an asset B
+        # choose which asset pays
+        assets = ["A", "B"]
+        weights = [participant.s2probA[paying_round_stage_2 - 1], participant.s2probB[paying_round_stage_2 - 1]]
+        
+        chosen_asset = random.choices(assets, weights = weights, k = 1)[0]
+
+        if chosen_asset[0] == "A":
+            participant.payoff_one_month_s2 = participant.s2monthA[paying_round_stage_2 - 1]
+
+        if chosen_asset[0] == "B":
+            participant.payoff_one_month_s2 = participant.s2monthB[paying_round_stage_2 - 1]
+
 
 class MplPage(Page):
     def is_displayed(player: Player):
@@ -156,26 +165,13 @@ class Results(Page):
         paying_asset_s1 = player.participant.paying_asset
         payoff_one_month_s1 = player.participant.payoff_one_month_s1
 
-        if choice == "f":
-
-            # get the payoff in one month
-            if participant.s2probA[paying_round_stage_2 - 1] == 1:
-                participant.payoff_one_month_s2 = participant.s2monthA[paying_round_stage_2 - 1]
-
-            else:
-                # sample with weights
-                assets = ["A", "B"]
-                weights = [participant.s2probA[paying_round_stage_2 - 1], participant.s2probB[paying_round_stage_2 - 1]]
-                chosen_asset = random.choices(assets, weights = weights, k = 1)[0]
-
-                if chosen_asset == "A":
-                    participant.payoff_one_month_s2 = participant.s2monthA[paying_round_stage_2 - 1]
-
-                if chosen_asset == "B":
-                    participant.payoff_one_month_s2 = participant.s2monthB[paying_round_stage_2 - 1]
-
-        else:
+        # if they chose the variable option, get the payoff from the list according to the paying row
+        if choice == "v":
             participant.payoff_one_month_s2 = C.LIST_OF_VARIABLE_OPTIONS[participant.paying_row]
+        
+        # if they chose the lottery asset (fixed), the payoff is unchanged from how it was chosen in the instructions page
+        if choice == "f":
+            None
 
         return dict(
             payoff_today_s1 = participant.payoff_today_s1,
