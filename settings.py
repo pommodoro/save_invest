@@ -62,7 +62,7 @@ ROOMS = [
         name='CELSS_lab',
         display_name='CELSS Lab',
         participant_label_file='_rooms/test_participant_file.txt',
-        use_secure_urls=True
+        use_secure_urls=False
     ),
 ]
 ADMIN_USERNAME = 'admin'
