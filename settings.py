@@ -42,7 +42,9 @@ PARTICIPANT_FIELDS = [
     's2probB',
     's2savings',
     's2monthA',
-    's2monthB' 
+    's2monthB',
+    'paying_round_stage_2',
+    'paying_row'
     ]
 	
 SESSION_FIELDS = []

@@ -70,11 +70,11 @@ class InstructionsStageTwo(Page):
         participant = player.participant
 
         # determine the paying round in stage 2
-        paying_round_stage_2 = random.randint(1, 32)
+        participant.paying_round_stage_2 = random.randint(1, 32)
 
         # determine the paying ROW in the round, there a 62 rows but we
         # want to sample from 0 to 61 for indexing
-        paying_row = random.randint(0, 61)
+        participant.paying_row = random.randint(0, 61)
 
 class MplPage(Page):
     def is_displayed(player: Player):
@@ -142,13 +142,13 @@ class Results(Page):
         participant = player.participant
 
         # get the player for the paying round
-        paying_player = player.in_round(paying_round_stage_2)
+        paying_player = player.in_round(participant.paying_round_stage_2)
 
         # get the fixed or variable
-        choice = paying_player.options_chosen[paying_row]
+        choice = paying_player.options_chosen[participant.paying_row]
 
         # get the payoff today
-        participant.payoff_today_s2 = participant.s2savings[paying_round_stage_2 - 1]
+        participant.payoff_today_s2 = participant.s2savings[participant.paying_round_stage_2 - 1]
 
         # gets stage 1 results
         paying_round1 = player.participant.paying_round
@@ -175,7 +175,7 @@ class Results(Page):
                     participant.payoff_one_month_s2 = participant.s2monthB[paying_round_stage_2 - 1]
 
         else:
-            participant.payoff_one_month_s2 = C.LIST_OF_VARIABLE_OPTIONS[paying_row]
+            participant.payoff_one_month_s2 = C.LIST_OF_VARIABLE_OPTIONS[participant.paying_row]
 
         return dict(
             payoff_today_s1 = participant.payoff_today_s1,
