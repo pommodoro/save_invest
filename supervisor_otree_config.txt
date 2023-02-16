@@ -1,0 +1,14 @@
+[program:otree]
+command=~/otree-env/bin/otree runprodserver 8000
+directory=~/projects/save_invest
+stdout_logfile=~/projects/save_invest/otree-supervisor.log
+stderr_logfile=~/projects/save_invest/otree-supervisor-errors.log
+autostart=true
+autorestart=true
+environment=
+  PATH="~/otree-env/bin/",
+  DATABASE_URL="postgres://postgres:cooldbs@localhost/django_db",
+  REDIS_URL="redis://localhost:6379",
+  OTREE_ADMIN_PASSWORD="coolpwds",
+  OTREE_PRODUCTION="1", # can set to 1
+  OTREE_AUTH_LEVEL="STUDY", # can set to STUDY or DEMO
