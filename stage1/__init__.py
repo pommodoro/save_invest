@@ -2,6 +2,7 @@ from otree.api import *
 import json
 import random
 import numpy as np
+import time
 
 doc = """
 Stage 1 of save invest experiment
@@ -120,6 +121,10 @@ class Player(BasePlayer):
     # Final counter round indicator
     is_done = models.BooleanField(initial=False)
 
+    # Reaction times
+    start_time = models.FloatField()
+    reaction_time = models.FloatField()
+
 # Error Messages for incorrect user inputs
 
 
@@ -190,6 +195,12 @@ class ComprehensionStageOne2(Page):
 class ComprehensionComplete(Page):
     def is_displayed(player):
         return player.round_number == 1
+    
+    @staticmethod
+    def before_next_page(player, timeout_happened):
+        participant = player.participant
+        participant.rts_save = []
+        participant.rts_invest = []
 
 
 class SaveToday(Page):
@@ -203,6 +214,9 @@ class SaveToday(Page):
 
     @staticmethod
     def vars_for_template(player: Player):
+        # time start to compute reaction time
+        player.start_time = time.time()
+
         # set the counter
         # if first round intialize at 0
         if (player.round_number == 1):
@@ -255,6 +269,10 @@ class SaveToday(Page):
 
     @staticmethod
     def before_next_page(player, timeout_happened):
+        # store reaction times
+        player.reaction_time = time.time() - player.start_time
+        player.participant.rts_save.append(player.reaction_time)
+
         # writing to memory after clicking submit
         participant = player.participant
         player.round_order = participant.round_order[player.counter]
@@ -283,6 +301,9 @@ class InvestA(Page):
 
     @staticmethod
     def vars_for_template(player):
+        # time start to compute reaction time
+        player.start_time = time.time()
+        
         order = player.participant.round_order[player.counter]
         endowment = C.ENDOWMENT[order]
         probA = C.PROBA[order]
@@ -300,6 +321,12 @@ class InvestA(Page):
             max_investA_display=max_investA,
             roundNo_display=player.counter+1
         )
+    
+    @staticmethod
+    def before_next_page(player, timeout_happened):
+        # store reaction times
+        player.reaction_time = time.time() - player.start_time
+        player.participant.rts_invest.append(player.reaction_time)
 
 
 class Confirm(Page):

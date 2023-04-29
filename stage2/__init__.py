@@ -2,6 +2,7 @@ from otree.api import *
 import json
 import random
 import numpy as np
+import time
 
 doc = """
 Stage 2 (MPL) of save invest experiment
@@ -49,6 +50,11 @@ class Player(BasePlayer):
     # back into a list by importing the json module and using using json.loads()
     options_chosen = models.StringField()
 
+    # Reaction times
+    start_time = models.FloatField()
+    reaction_time = models.FloatField()
+    
+
 # PAGES
 
 
@@ -84,6 +90,8 @@ class InstructionsStageTwo(Page):
         if chosen_asset[0] == "B":
             participant.payoff_one_month_s2 = participant.s2monthB[paying_round_stage_2 - 1]
 
+        participant.rts_mpl = []
+
 
 class MplPage(Page):
     def is_displayed(player: Player):
@@ -94,6 +102,9 @@ class MplPage(Page):
 
     @staticmethod
     def vars_for_template(player: Player):
+        # time start to compute reaction time
+        player.start_time = time.time()
+
         # savings selected in the round number
         payment_today = player.participant.s2savings[player.round_number - 1]
 
@@ -139,6 +150,12 @@ class MplPage(Page):
             "probA_display": probA,
             "probB_display": probB
         }
+    
+    @staticmethod
+    def before_next_page(player, timeout_happened):
+        # store reactions times
+        player.reaction_time = time.time() - player.start_time
+        player.participant.rts_mpl.append(player.reaction_time)
 
 
 class Results(Page):
@@ -173,11 +190,19 @@ class Results(Page):
         if choice == "f":
             None
 
+        # get payments in terms of total payment today and total payment in one month
+        # adding the $5 cash payoff today and $5 transfer
+        total_transfer_today = payoff_today_s1 + participant.payoff_today_s2 + 5
+        total_transfer_1m = payoff_one_month_s1 + participant.payoff_one_month_s2 + 5
+
+
         return dict(
             payoff_today_s1 = participant.payoff_today_s1,
             payoff_one_month_s1 = participant.payoff_one_month_s1,
             payoff_today_s2 = participant.payoff_today_s2,
-            payoff_one_month_s2 = participant.payoff_one_month_s2)
+            payoff_one_month_s2 = participant.payoff_one_month_s2,
+            total_transfer_today = total_transfer_today,
+            total_transfer_1m = total_transfer_1m)
 
 page_sequence = [
     InstructionsStageTwo,
