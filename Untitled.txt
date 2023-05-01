@@ -1,0 +1,9 @@
+Feb 09 20:11:38 ip-172-31-17-191 nginx[603211]: nginx: [warn] server name "http://3.224.84.106/" has suspicious symbols in /etc/nginx/sites-enabled/re>
+
+ 0.7695507
+
+0.3637445 
+
+20% chance of 0 and an 80% chance of 0. Check that it was becuase they took everything immediately
+
+have totals in how to fill in the payment form
