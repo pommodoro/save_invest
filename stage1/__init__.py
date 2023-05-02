@@ -13,8 +13,8 @@ class C(BaseConstants):
     NAME_IN_URL = 'mplApp'
     PLAYERS_PER_GROUP = None
 
-    NUM_ROUNDS = 126
-    # 126
+    # this lets each person make at most 24 changes
+    NUM_ROUNDS = 512
 
     # number of unique rounds -1. Setting this to 1 gives two unique rounds.
     # There are 42 total comparisons, so this should be set to 41.
